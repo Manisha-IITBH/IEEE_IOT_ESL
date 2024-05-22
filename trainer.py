@@ -64,7 +64,7 @@ if __name__ == '__main__':
         
         trainer.fit()
         
-    elif args.dataset == 'CIFAR':
+    elif args.dataset == 'CIFAR10':
         if args.use_key_value_store:
             trainer = ICTrainer(args)
         else:

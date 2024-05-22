@@ -31,6 +31,12 @@ KiTS-19 EXAMPLE:
 python trainer.py -c 6 -bs 4 -tbs 2 -n 30 --client_lr 6e-4 --server_lr 6e-4 --dataset kits19 --seed 42 --model nnunet --split 3 -kv --kv_refresh_rate 5 --kv_factor 2 --wandb
 ```
 
+CIFAR10 EXAMPLE:
+
+```
+python trainer.py -c 10 -bs 64 -tbs 256 -n 80 --client_lr 1e-3 --server_lr 1e-3 --dataset CIFAR10 --seed 42 --model resnet18 --split 1 -kv --kv_refresh_rate 0 --kv_factor 1 --wandb
+```
+
 ```
 options:
   -h, --help            show this help message and exit
