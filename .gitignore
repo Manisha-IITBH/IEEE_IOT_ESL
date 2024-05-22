@@ -7,3 +7,4 @@ wandb
 *.ipynb
 !overhead_analysis/*.ipynb
 /cifar-10-python.tar.gz
+.csv
