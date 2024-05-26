@@ -414,7 +414,7 @@ class ICTrainer:
             - merge model weights across clients (center_back & back)
         """
 
-        print(f"training {epoch}...\n\n")
+        print(f"training {epoch}..........................................................................................\n\n")
         num_iters = self.create_iters(dl='train')
         #max_iters = max(num_iters.values())
         self.overall_f1['train'].append(0)
@@ -692,7 +692,7 @@ class ICTrainer:
         print("RUNNING INFERENCE from the best models on test dataset")
 
         self.load_best_models()
-
+        avg_acc=0
         for c_id in self.client_ids:
 
             trues = []
@@ -709,21 +709,29 @@ class ICTrainer:
                 trues.append(label.cpu())
                 preds.append(x4.cpu())
 
-            preds = torch.vstack(preds)
-            targets = torch.vstack(trues)
+            #preds = torch.vstack(preds)
+            #targets = torch.vstack(trues)
+            preds = torch.cat(preds)
+            targets = torch.cat(trues)
+            print("Shapes - preds:", preds.shape, "targets:", targets.shape)
             targets = targets.reshape(-1).numpy()
             preds = np.argmax(preds.numpy(), axis=1)
-            bacc = balanced_accuracy_score(targets, preds)
+            correct = np.sum(preds == targets)
+            total = len(targets)
+            accuracy = correct / total
+            #bacc = balanced_accuracy_score(targets, preds)
             wandb.log({
                 'inference cfm': wandb.plot.confusion_matrix(
                     preds=preds,
                     y_true=targets,
-                    class_names=[f'{i}' for i in range(8)]
+                    class_names=[f'{i}' for i in range(10)]
                 )
             })
 
-            print(f'inference score {c_id}: {bacc}')
-            wandb.log({f'inference score {c_id}': bacc})
+            print(f'inference score {c_id}: {accuracy}')
+            avg_acc+=accuracy
+            wandb.log({f'inference score {c_id}': accuracy})
+        print(f'Average inference score: {avg_acc/10}')
 
 
     def clear_cache(self,):
@@ -865,3 +873,4 @@ if __name__ == '__main__':
     args = parse_arguments()
     trainer = ISICTrainer(args)
     trainer.fit()
+    trainer.inference()

@@ -37,6 +37,7 @@ class Client(Thread):
         self.activation_mappings={}
         self.data_key=0
         self.kv_flag=0
+        self.kv_test_flag=0
 
         self.test_target_mappings={}
         self.test_activation_mappings={}
@@ -66,7 +67,9 @@ class Client(Thread):
         self.data = None
         self.targets = None
         self.batchkeys = None
+        self.test_batchkeys = None
         self.key = None
+        self.test_key = None
         self.n_correct = 0
         self.n_samples = 0
         self.front_optimizer = None
@@ -182,6 +185,8 @@ class Client(Thread):
         loss function to calculate loss for isic
         """
         # self.loss=self.loss_fn(self.outputs, self.targets.view(-1).long()) # for CE loss
+        print("calculate loss output", self.outputs.shape)
+        print("calculate target", self.targets.shape)
         self.loss = self.loss_fn(self.outputs, self.targets.long())
 
         if mode=='train':
@@ -231,15 +236,15 @@ class Client(Thread):
         )
         self.test_DataLoader = torch.utils.data.DataLoader(
             self.test_dataset,
-            batch_size=self.test_batch_size,
-            shuffle=False,
+            batch_size=self.train_batch_size,
+            shuffle=True,
             num_workers=2,
             pin_memory=True
         )
         self.main_test_DataLoader = torch.utils.data.DataLoader(
             self.main_test_dataset,
             batch_size=self.test_batch_size,
-            shuffle=False,
+            shuffle=True,
             num_workers=2,
             pin_memory=True
         )
@@ -307,13 +312,14 @@ class Client(Thread):
 
     def forward_front_key_value_test(self):
         print("forward method")
-        print("self.kv_flag",self.kv_flag)
+        print("self.kv_flag",self.kv_test_flag)
         batch_data = next(self.test_iterator)
-        self.data, self.targets , self.key= batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id']
-        print("keys",self.key)
+        self.data, self.targets , self.test_key= batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id']
+        print("target", self.targets)
+        print("keys",self.test_key)
         # self.front_model.to(self.device)
-        self.activations1 = self.front_model(self.data)
-        if self.kv_flag==1:
+        #self.activations1 = self.front_model(self.data)
+        if self.kv_test_flag==1:
             self.activations1 = self.front_model(self.data)
             print("Size of data:", self.data.size())
             print("Size of clinet_activations1:", self.activations1.size())
