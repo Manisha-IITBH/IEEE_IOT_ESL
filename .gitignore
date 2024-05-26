@@ -9,3 +9,4 @@ wandb
 /cifar-10-python.tar.gz
 *.csv
 .fuse_hidden002115d900000006
+.fuse_hidden*
