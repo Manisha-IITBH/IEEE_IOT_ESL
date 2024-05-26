@@ -169,12 +169,6 @@ class Client(Thread):
 
     def backward_back(self):
         self.loss.backward()
-
-    def set_targets(self):
-        self.targets=torch.Tensor(np.array([self.target_mappings[x] for x in self.current_keys])).to(self.device)
-
-    def set_test_targets(self):
-        self.targets=torch.Tensor(np.array([self.test_target_mappings[x] for x in self.current_keys])).to(self.device)
            
     def backward_front(self):
         self.activations1.backward(self.remote_activations1.grad)
@@ -262,8 +256,7 @@ class Client(Thread):
         self.outputs = self.back_model(self.remote_activations2)
         print("Size of clinet_activations1:", self.remote_activations2.size())
         print("Size of outputs",self.outputs.size())
-        # print("---", self.outputs)
-        # print("+++", self.outputs.shape)
+
 
     def forward_front(self):
         batch_data = next(self.iterator)
@@ -275,27 +268,7 @@ class Client(Thread):
         self.remote_activations1 = self.activations1.detach().requires_grad_(True)
 
         # return self.activations1
-
-    
-    def forward_front_key_value_old(self):
-        batch_data = next(self.iterator)
-        #self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
-        self.data, self.targets, self.key = batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id']
-        print("Label", self.targets)
-        print("keys",self.key)
-        # self.front_model.to(self.device)
-        self.activations1 = self.front_model(self.data)
-        print("Size of data:", self.data.size())
-        print("Size of clinet_activations1:", self.activations1.size())
-        self.remote_activations1 = self.activations1.detach().requires_grad_(True)
-        #local_activations1=list(self.activations1.cpu().detach().numpy())
-        #local_targets=list(self.targets.cpu().detach().numpy())
-        
-        #for i in range(0,len(self.key)):
-        #    self.activation_mappings[self.data_key]=local_activations1[i]
-        #    self.target_mappings[self.data_key]=local_targets[i]
-        #    self.data_key+=1
-            
+                    
     def forward_front_key_value(self):
         batch_data = next(self.iterator)
         #self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
@@ -324,13 +297,7 @@ class Client(Thread):
             print("Size of data:", self.data.size())
             print("Size of clinet_activations1:", self.activations1.size())
             self.remote_activations1 = self.activations1.detach().requires_grad_(True)
-        #local_activations1=list(self.activations1.cpu().detach().numpy())
-        #local_targets=list(self.targets.cpu().detach().numpy())
-        
-        #for i in range(0,len(local_targets)):
-        #    self.test_activation_mappings[self.test_data_key]=local_activations1[i]
-        #    self.test_target_mappings[self.test_data_key]=local_targets[i]
-        #    self.test_data_key+=1
+
 
     def get_model(self):
         model = get_object(self.socket)

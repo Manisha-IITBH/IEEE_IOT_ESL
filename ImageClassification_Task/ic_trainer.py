@@ -226,10 +226,6 @@ class ICTrainer:
             print(f"Error creating directory {self.save_dir}: {e}")
             raise
 
-    #def _create_save_dir(self,):
-    #    self.save_dir = Path(f'./saved_models/{self.args.dataset}/key_value_mode/model_split{self.args.split}')
-    #    self.save_dir.mkdir(exist_ok=True,parents=True)
-
     
     def remove_frozen_models(self,):
         """
@@ -257,40 +253,69 @@ class ICTrainer:
         print(f'personalizing, freezing server copy center model @ epoch {epoch}')
         for c_id, sc_client in self.sc_clients.items():
             sc_client.center_back_model.freeze(epoch,pretrained=self.args.pretrained)
-
-
-    def merge_model_weights(self,epoch):
+            
+    def merge_model_weights(self, epoch):
         """
-        - merge weights and distribute over all server-side center_back models
-        - In the personalisation phase merging of weights of the back model layers is stopped:
-            - merge weights and distribute over all client-side back models
+        Merge weights and distribute over all server-side center_back models.
+        In the personalization phase, merging of weights of the back model layers is stopped:
+            - Merge weights and distribute over all client-side back models if not in personalization mode.
+
+        Args:
+            epoch (int): The current epoch during which merging is applied.
         """
+        print(f'Merging model weights at epoch {epoch}')
+
         params = []
         sample_lens = []
-        for c_id, sc_client in self.sc_clients.items():
-            params.append(copy.deepcopy(sc_client.center_back_model.state_dict()))
-            sample_lens.append(len(self.clients[c_id].train_dataset) * self.args.kv_factor)
-        # pfsl merge weights util
-        w_glob = merge_weights(params, sample_lens)
 
+        # Collect the state dictionaries and sample lengths for all server-side center_back models
         for c_id, sc_client in self.sc_clients.items():
-            sc_client.center_back_model.load_state_dict(w_glob)
+            try:
+                params.append(copy.deepcopy(sc_client.center_back_model.state_dict()))
+                sample_lens.append(len(self.clients[c_id].train_dataset) * self.args.kv_factor)
+            except Exception as e:
+                print(f"Error collecting weights for server copy client {c_id}: {e}")
+                continue
+
+        try:
+            # Merge weights using a custom utility function
+            w_glob = merge_weights(params, sample_lens)
+
+            # Distribute the merged weights to all server-side center_back models
+            for c_id, sc_client in self.sc_clients.items():
+                sc_client.center_back_model.load_state_dict(w_glob)
+                print(f"Merged weights loaded to server copy client {c_id}")
+        except Exception as e:
+            print(f"Error merging or distributing server-side weights: {e}")
 
         if not self.personalization_mode:
-
             params = []
             sample_lens = []
-            for c_id, client in self.clients.items():
-                params.append(copy.deepcopy(client.back_model.state_dict()))
-                sample_lens.append(len(client.train_dataset))
-            # pfsl merge weights util
-            w_glob_cb = merge_weights(params,sample_lens)
-    
-            for c_id, client in self.clients.items():
-                client.back_model.load_state_dict(w_glob_cb)
 
-        del params, sample_lens
+            # Collect the state dictionaries and sample lengths for all client-side back models
+            for c_id, client in self.clients.items():
+                try:
+                    params.append(copy.deepcopy(client.back_model.state_dict()))
+                    sample_lens.append(len(client.train_dataset))
+                except Exception as e:
+                    print(f"Error collecting weights for client {c_id}: {e}")
+                    continue
+
+            try:
+                # Merge weights using a custom utility function
+                w_glob_cb = merge_weights(params, sample_lens)
         
+                # Distribute the merged weights to all client-side back models
+                for c_id, client in self.clients.items():
+                    client.back_model.load_state_dict(w_glob_cb)
+                    print(f"Merged weights loaded to client {c_id}")
+            except Exception as e:
+                print(f"Error merging or distributing client-side weights: {e}")
+
+        # Clean up to free memory
+        del params, sample_lens
+
+    
     def create_iters(self, dl='train'):
         """
         - Append 0 for train_f1/test_f1 per client list.
