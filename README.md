@@ -35,6 +35,8 @@ CIFAR10 EXAMPLE:
 
 ```
 python trainer.py -c 10 -bs 64 -tbs 256 -n 80 --client_lr 1e-3 --server_lr 1e-3 --dataset CIFAR10 --seed 42 --model resnet18 --split 1 -kv --kv_refresh_rate 0 --kv_factor 1 --wandb
+
+python trainer.py -c 10 -bs 10 -tbs 10 -n 80 --client_lr 1e-3 --server_lr 1e-3 --dataset CIFAR10 --seed 42 --model resnet18 --split 1 -kv --kv_refresh_rate 0 --kv_factor 1 --wandb > text.txt
 ```
 
 ```

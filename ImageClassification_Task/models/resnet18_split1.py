@@ -100,3 +100,20 @@ class back(nn.Module):
         x = self.pool(x)
         x = self.fc(x)
         return x
+    
+# Instantiate the model and print its architecture
+front_model = front()
+print("Front Model:")
+print(front_model)
+
+center_front_model = center_front()
+print("\nCenter Front Model:")
+print(center_front_model)
+
+center_back_model = center_back()
+print("\nCenter Back Model:")
+print(center_back_model)
+
+back_model = back()
+print("\nBack Model:")
+print(back_model)

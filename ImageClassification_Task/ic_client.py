@@ -36,6 +36,7 @@ class Client(Thread):
         self.target_mappings={}
         self.activation_mappings={}
         self.data_key=0
+        self.kv_flag=0
 
         self.test_target_mappings={}
         self.test_activation_mappings={}
@@ -64,6 +65,8 @@ class Client(Thread):
         self.criterion = None
         self.data = None
         self.targets = None
+        self.batchkeys = None
+        self.key = None
         self.n_correct = 0
         self.n_samples = 0
         self.front_optimizer = None
@@ -105,9 +108,15 @@ class Client(Thread):
 	    
     @torch.no_grad()
     def run_metric(self,preds,targets):
+        print("Run metric")
+        print("Shapes - preds:", preds.shape, "targets:", targets.shape)
+        print(preds.shape[1])
+        print(torch.argmax(preds,dim=1).float())
+        print(targets.squeeze())
         return f1_score(
-            preds=torch.argmax(preds,dim=1).float(),
-            target=targets.squeeze(),
+            #preds=torch.argmax(preds,dim=1).float(),
+            preds=preds.argmax(dim=1),
+            target=targets,
             task='multiclass',
             num_classes=10
         )
@@ -118,9 +127,13 @@ class Client(Thread):
         calculates main metric to use and then resets over epoch
         """
         if mode=='train':
-            preds = torch.vstack(self.train_preds)
-            targets = torch.vstack(self.train_targets)
+            preds= torch.cat(self.train_preds,dim=0)
+            targets = torch.cat(self.train_targets, dim=0)
+            #preds = torch.vstack(self.train_preds)
+            #targets = torch.vstack(self.train_targets)
+            print("Shapes - preds:", preds.shape, "targets:", targets.shape)
             bal_acc = self.normal_accuracy(preds, targets)
+            print(bal_acc)
             f1_macro = f1_score(
                 preds=torch.argmax(preds,dim=1).float(),
                 target=targets.squeeze(),
@@ -131,9 +144,13 @@ class Client(Thread):
             self.train_targets = []
             self.train_preds = []
         elif mode=='test':
-            preds = torch.vstack(self.test_preds)
-            targets = torch.vstack(self.test_targets)
+            preds= torch.cat(self.test_preds,dim=0)
+            targets = torch.cat(self.test_targets, dim=0)
+            #preds = torch.vstack(self.test_preds)
+            #targets = torch.vstack(self.test_targets)
+            print("Shapes - preds:", preds.shape, "targets:", targets.shape)
             bal_acc = self.normal_accuracy(preds, targets)
+            print(bal_acc)
             f1_macro = f1_score(
                 preds=torch.argmax(preds,dim=1).float(),
                 target=targets.squeeze(),
@@ -176,6 +193,8 @@ class Client(Thread):
     def calculate_train_metric(self):
         preds = self.outputs
         targets = self.targets
+        print("Calculate train metric")
+        print("Shapes - preds:", preds.shape, "targets:", targets.shape)
         self.train_preds.append(preds.cpu())
         self.train_targets.append(targets.cpu())
         f1 = self.run_metric(preds.cpu(),targets.cpu())
@@ -236,12 +255,15 @@ class Client(Thread):
     def forward_back(self):
         # self.back_model.to(self.device)
         self.outputs = self.back_model(self.remote_activations2)
+        print("Size of clinet_activations1:", self.remote_activations2.size())
+        print("Size of outputs",self.outputs.size())
         # print("---", self.outputs)
         # print("+++", self.outputs.shape)
 
     def forward_front(self):
         batch_data = next(self.iterator)
-        self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
+        self.data, self.targets, self.key = batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id'].to(self.device)
+        print(self.key)
         
         # self.front_model.to(self.device)
         self.activations1 = self.front_model(self.data)
@@ -250,36 +272,59 @@ class Client(Thread):
         # return self.activations1
 
     
-    def forward_front_key_value(self):
+    def forward_front_key_value_old(self):
         batch_data = next(self.iterator)
-        self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
+        #self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
+        self.data, self.targets, self.key = batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id']
+        print("Label", self.targets)
+        print("keys",self.key)
         # self.front_model.to(self.device)
         self.activations1 = self.front_model(self.data)
-        local_activations1=list(self.activations1.cpu().detach().numpy())
-        local_targets=list(self.targets.cpu().detach().numpy())
+        print("Size of data:", self.data.size())
+        print("Size of clinet_activations1:", self.activations1.size())
+        self.remote_activations1 = self.activations1.detach().requires_grad_(True)
+        #local_activations1=list(self.activations1.cpu().detach().numpy())
+        #local_targets=list(self.targets.cpu().detach().numpy())
         
-        for i in range(0,len(local_targets)):
-            self.activation_mappings[self.data_key]=local_activations1[i]
-            self.target_mappings[self.data_key]=local_targets[i]
-            self.data_key+=1
+        #for i in range(0,len(self.key)):
+        #    self.activation_mappings[self.data_key]=local_activations1[i]
+        #    self.target_mappings[self.data_key]=local_targets[i]
+        #    self.data_key+=1
+            
+    def forward_front_key_value(self):
+        batch_data = next(self.iterator)
+        #self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
+        self.data, self.targets, self.key = batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id']
+        #print("Label", self.targets)
+        print("keys",self.key)
+        # self.front_model.to(self.device)
+        if self.kv_flag==1:
+            self.activations1 = self.front_model(self.data)
+            print("Size of data:", self.data.size())
+            print("Size of clinet_activations1:", self.activations1.size())
+            self.remote_activations1 = self.activations1.detach().requires_grad_(True)
 
 
     def forward_front_key_value_test(self):
+        print("forward method")
+        print("self.kv_flag",self.kv_flag)
         batch_data = next(self.test_iterator)
-        self.data, self.targets = batch_data['image'].to(self.device), batch_data['label'].to(self.device)
+        self.data, self.targets , self.key= batch_data['image'].to(self.device), batch_data['label'].to(self.device), batch_data['id']
+        print("keys",self.key)
         # self.front_model.to(self.device)
         self.activations1 = self.front_model(self.data)
-        local_activations1=list(self.activations1.cpu().detach().numpy())
-        local_targets=list(self.targets.cpu().detach().numpy())
+        if self.kv_flag==1:
+            self.activations1 = self.front_model(self.data)
+            print("Size of data:", self.data.size())
+            print("Size of clinet_activations1:", self.activations1.size())
+            self.remote_activations1 = self.activations1.detach().requires_grad_(True)
+        #local_activations1=list(self.activations1.cpu().detach().numpy())
+        #local_targets=list(self.targets.cpu().detach().numpy())
         
-        for i in range(0,len(local_targets)):
-            self.test_activation_mappings[self.test_data_key]=local_activations1[i]
-            self.test_target_mappings[self.test_data_key]=local_targets[i]
-            self.test_data_key+=1
-    
-
-        
-
+        #for i in range(0,len(local_targets)):
+        #    self.test_activation_mappings[self.test_data_key]=local_activations1[i]
+        #    self.test_target_mappings[self.test_data_key]=local_targets[i]
+        #    self.test_data_key+=1
 
     def get_model(self):
         model = get_object(self.socket)

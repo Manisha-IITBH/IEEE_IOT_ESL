@@ -65,17 +65,18 @@ def setting2_dirch_val(train_full_dataset, test_full_dataset, num_users):
     return dict_users, dict_users_test, dict_users_val
 
 class CIFAR10Dataset(Dataset):
-    def __init__(self, images, labels, tfms):
+    def __init__(self, images, labels, client_id, dataset_type, tfms):
         self.images = images
         self.labels = labels
+        self.client_id = client_id
+        self.dataset_type = dataset_type  # 'train=0, 'val=1', or 'test=2'
         self.tfms = tfms
-
-    def __len__(self):
-        return len(self.images)
 
     def __getitem__(self, idx):
         image = self.images[idx]
         label = self.labels[idx]
+        unique_id = f"{self.client_id}-{self.dataset_type}-{idx}"  # Append dataset_type to the unique ID
+
         # Convert NumPy array to PIL Image
         image = Image.fromarray(image)
         if self.tfms:
@@ -83,8 +84,13 @@ class CIFAR10Dataset(Dataset):
         label = torch.tensor(label).long()
         return {
             'image': image,
-            'label': label
+            'label': label,
+            'id': unique_id
         }
+
+    def __len__(self):
+        return len(self.images)  # Return the length of the images (number of samples)
+
 
 class CIFAR10DataBuilder:
     def __init__(self, img_size=32, num_clients=10):
@@ -99,16 +105,17 @@ class CIFAR10DataBuilder:
 
     def get_default_transforms(self):
         transform_train = transforms.Compose([
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
+            transforms.Resize((224, 224)),
             transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                    std=[0.229, 0.224, 0.225])
         ])
         
-        transform_test = transforms.Compose([
+        transform_test =  transforms.Compose([
+            transforms.Resize((224, 224)),
             transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ])
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                    std=[0.229, 0.224, 0.225])])
         
         return transform_train, transform_test
 
@@ -132,10 +139,12 @@ class CIFAR10DataBuilder:
 
         test_images = test_dataset.data[test_indices]
         test_labels = np.array(test_dataset.targets)[test_indices]
-
-        train_ds = CIFAR10Dataset(train_images, train_labels, transform_train)
-        val_ds = CIFAR10Dataset(val_images, val_labels, transform_test)
-        test_ds = CIFAR10Dataset(test_images, test_labels, transform_test)
+        print("Training")
+        train_ds = CIFAR10Dataset(train_images, train_labels, client_id, 0, transform_train)
+        print("Validation")
+        val_ds = CIFAR10Dataset(val_images, val_labels, client_id, 1,  transform_test)
+        print("Testing")
+        test_ds = CIFAR10Dataset(test_images, test_labels, client_id, 2, transform_test)
 
         return train_ds, val_ds, test_ds
 

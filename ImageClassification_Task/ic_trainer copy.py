@@ -100,24 +100,6 @@ class ICTrainer:
                 self.train_batch_size,
                 self.test_batch_size
             )
-            
-            # Check for duplicate IDs in train dataset
-            train_ids = [sample['id'] for sample in train_ds]
-            print(train_ids)
-            #if len(train_ids) != len(set(train_ids)):
-            #    print(f"Warning: Duplicate IDs found in train dataset of client {c_id}")
-
-            # Check for duplicate IDs in test dataset
-            test_ids = [sample['id'] for sample in test_ds]
-            print(test_ids)
-            #if len(test_ids) != len(set(test_ids)):
-            #    print(f"Warning: Duplicate IDs found in test dataset of client {c_id}")
-
-            # Check for duplicate IDs in main test dataset
-            main_test_ids = [sample['id'] for sample in main_test_ds]
-            print(main_test_ids)
-            #if len(main_test_ids) != len(set(main_test_ids)):
-            #    print(f"Warning: Duplicate IDs found in main test dataset of client {c_id}")
 
         print(f'generated {self.num_clients} clients with data')
 
@@ -307,7 +289,7 @@ class ICTrainer:
                 print(f"Client {c_id}: Added 0 to train_f1 list.")
                 print(f"Client {c_id}: Assigned train_DataLoader iterator.")
                 print(f"Client {c_id}: Number of train iterations set to {client.num_iterations}.")
-                #print(f"Client {c_id}: len_keys for train Data: {len_keys}")
+                print(f"Client {c_id}: len_keys for train Data: {len_keys}")
                 print(f"Client {c_id}: num_iters for train Data: {num_iters[c_id]}")
             elif dl == 'test':
                 client.test_f1.append(0)
@@ -317,13 +299,16 @@ class ICTrainer:
                 print(f"Client {c_id}: Added 0 to test_f1 list.")
                 print(f"Client {c_id}: Assigned test_DataLoader iterator.")
                 print(f"Client {c_id}: Number of test iterations set to {client.num_test_iterations}.")
-                #print(f"Client {c_id}: len_keys for test Data: {len_keys}")
+                print(f"Client {c_id}: len_keys for test Data: {len_keys}")
                 print(f"Client {c_id}: num_iters for test Data: {num_iters[c_id]}")
 
         print(f"Created iterators for {dl} data.")
         return num_iters
+
+        
     
-    
+
+
     def store_forward_mappings_kv(self,mode='train'):
         """
         kv: key-value store {data_key:np.Array}\n
@@ -333,54 +318,72 @@ class ICTrainer:
         - the targets are stored in target mappings, each target with its own index
         
         these values are reused every epoch / refreshed once in a while, this is done for both train and test mappings
-        """    
+        """
+
         if mode=='train':
+
             # create iterators for initial forward pass of training phase
             for c_id, client in self.clients.items():
-                client.kv_flag=1
-                self.sc_clients[c_id].kv_flag=1
                 client.num_iterations = len(client.train_DataLoader)
-                client.iterator = iter(client.train_DataLoader)
-            # forward client-side front model which sets activation and target mappings.
-            for c_id, client in tqdm(self.clients.items()):
-                print(c_id,client.num_iterations)
-                #for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
-                for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
-                    print(it)
-                #    if client.data_key % len(client.train_dataset) == 0:
-                    client.forward_front_key_value()
-                    self.sc_clients[c_id].remote_activations1 = client.remote_activations1
-                    self.sc_clients[c_id].batchkeys = client.key
-                    self.sc_clients[c_id].forward_center_front()
-                print("Train Dictionary Created")
-                print("Dictionary keys Length:", len(list(self.sc_clients[c_id].activation_mappings.keys())))
-                client.kv_flag=0
-                self.sc_clients[c_id].kv_flag=0
-        else:
-            print("For Test dataset")
-            # create iterators for initial forward pass of testing phase
-            for c_id, client in self.clients.items():
-                client.kv_flag=1
-                self.sc_clients[c_id].kv_flag=1
-                client.num_test_iterations = len(client.test_DataLoader)
-                client.test_iterator = iter(client.test_DataLoader)
                 
             # forward client-side front model which sets activation and target mappings.
             for c_id, client in tqdm(self.clients.items()):
-                print(c_id,client.num_test_iterations)
-                #for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
+                for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
+                    if client.data_key % len(client.train_dataset) == 0:
+                        client.iterator = iter(client.train_DataLoader)
+                    client.forward_front_key_value()
+
+            # send activation mappings to server-side for center models use.
+            for c_id, client in self.clients.items():
+                self.sc_clients[c_id].activation_mappings = client.activation_mappings
+                self.sc_clients[c_id].all_keys = list(client.activation_mappings.keys())
+                
+            # select random activation mappings of length=batch_size
+            # forward server-side center_front model
+            for c_id, sc_client in tqdm(self.sc_clients.items()):    
+                num_iters = int(ceil(len(sc_client.all_keys) / self.clients[c_id].train_batch_size))
+                for it in tqdm(range(num_iters),desc="server center_front"):
+                    # key selection
+                    sc_client.current_keys=list(np.random.choice(sc_client.all_keys, min(self.clients[c_id].train_batch_size, len(sc_client.all_keys)), replace=False))
+                    sc_client.update_all_keys()
+                    # choosing activations from client-side and moving them to server-side
+                    self.clients[c_id].activations1=torch.Tensor(np.array([sc_client.activation_mappings[x] for x in sc_client.current_keys])).to(self.device)
+                    self.clients[c_id].remote_activations1=self.clients[c_id].activations1.detach().requires_grad_(True)
+                    sc_client.remote_activations1=self.clients[c_id].remote_activations1
+                    # forward center_front
+                    sc_client.forward_center_front()
+
+        else:
+
+            # create iterators for initial forward pass of testing phase
+            for c_id, client in self.clients.items():
+                client.test_iterator=iter(client.test_DataLoader)
+                client.num_test_iterations = len(client.test_DataLoader)
+
+            # [TEST] forward client-side front model which sets activation and target mappings.
+            for c_id, client in tqdm(self.clients.items()):
                 for it in tqdm(range(client.num_test_iterations)):
-                    print(it)
-                #    if client.data_key % len(client.train_dataset) == 0:
                     client.forward_front_key_value_test()
-                    self.sc_clients[c_id].remote_activations1 = client.remote_activations1
-                    self.sc_clients[c_id].batchkeys = client.key
-                    self.sc_clients[c_id].forward_center_front_test()
-                print("Test Dictionary keys Length:", len(list(self.sc_clients[c_id].test_activation_mappings.keys())))
-                print("Test Dictionary Created")
-                #print("Dictionary keys Length:", len(list(self.sc_clients[c_id].activation_mappings.keys())))
-                client.kv_flag=0
-                self.sc_clients[c_id].kv_flag=0
+
+            # [TEST] send activation, mappings to server-side for center models use.
+            for c_id, client in self.clients.items():
+                self.sc_clients[c_id].test_activation_mappings = client.test_activation_mappings
+                self.sc_clients[c_id].all_keys = list(client.test_activation_mappings.keys())
+
+            # [TEST] select random activation mappings of length=test_batch_size
+            # [TEST] forward server-side center_front model
+            for c_id, sc_client in tqdm(self.sc_clients.items()):
+                for it in tqdm(range(self.clients[c_id].num_test_iterations)):
+                    # key selection
+                    sc_client.current_keys=list(np.random.choice(sc_client.all_keys, min(self.clients[c_id].test_batch_size, len(sc_client.all_keys)), replace=False))
+                    sc_client.update_all_keys()
+                    # choosing activations from client-side and moving them to server-side
+                    self.clients[c_id].activations1=torch.Tensor(np.array([sc_client.test_activation_mappings[x] for x in sc_client.current_keys])).to(self.device)
+                    self.clients[c_id].remote_activations1=self.clients[c_id].activations1.detach().requires_grad_(True)
+                    sc_client.remote_activations1=self.clients[c_id].remote_activations1
+                    # forward center_front
+                    sc_client.forward_center_front_test()
+
 
     def populate_key_value_store(self,):
         """
@@ -388,9 +391,9 @@ class ICTrainer:
         - populates key-value store kv_factor no. of times
         """
 
-        #for c_id in self.client_ids:
-        #    self.clients[c_id].data_key = 0
-        #    self.clients[c_id].test_data_key = 0
+        for c_id in self.client_ids:
+            self.clients[c_id].data_key = 0
+            self.clients[c_id].test_data_key = 0
 
         print('generating training samples in key-value store...')
         self.store_forward_mappings_kv(mode='train')
@@ -416,59 +419,88 @@ class ICTrainer:
 
         print(f"training {epoch}...\n\n")
         num_iters = self.create_iters(dl='train')
-        #max_iters = max(num_iters.values())
+        max_iters = max(num_iters.values())
         self.overall_f1['train'].append(0)
 
         # set keys
-        #for c_id, sc_client in self.sc_clients.items():
-        #    sc_client.all_keys = list(sc_client.activation_mappings.keys())
-        
-        for client_id, client in tqdm(self.clients.items()):
-                #client.train_acc.append(0)
-                #client.loss_record.append(0)
-                client.iterator = iter(client.train_DataLoader)
-                #for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
-                for iteration in tqdm(range(client.num_iterations)):
-                    client.forward_front_key_value()
-                    #sc_clients[client_id].remote_activations1 = client.remote_activations1
-                    self.sc_clients[client_id].batchkeys = client.key
-                    self.sc_clients[client_id].forward_center_front()
-                    self.sc_clients[client_id].forward_center_back()
-                    client.remote_activations2 = self.sc_clients[client_id].remote_activations2
+        for c_id, sc_client in self.sc_clients.items():
+            sc_client.all_keys = list(sc_client.activation_mappings.keys())
+
+        # per iteration, run the following:
+        for it in tqdm(range(max_iters)):
+
+            # forward server-side center_back model with activations
+            for c_id, sc_client in self.sc_clients.items():
+                if num_iters[c_id] != 0:
+                    sc_client.current_keys=list(np.random.choice(sc_client.all_keys, min(self.clients[c_id].train_batch_size, len(sc_client.all_keys)), replace=False))
+                    sc_client.update_all_keys()
+                    sc_client.middle_activations=torch.Tensor(np.array([sc_client.activation_mappings[x] for x in sc_client.current_keys])).to(self.device).detach().requires_grad_(True)
+
+                    sc_client.forward_center_back()
+
+            # forward client-side back model with activations
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
+                    client.current_keys = self.sc_clients[c_id].current_keys
+                    client.remote_activations2 = self.sc_clients[c_id].remote_activations2
+
                     client.forward_back()
+                    client.set_targets()
+
+            # calculate train loss
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
                     client.calculate_loss(mode='train')
                     wandb.log({'train step loss': client.loss.item()})
-                    #client.calculate_flamby_loss()         #calculate_loss()
-                    #client.loss_record[-1]+=client.calculate_flamby_loss()
+
+            # backprop (back model) in client equivalent for client.backward_back()
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
                     client.loss.backward()
-                    self.sc_clients[client_id].remote_activations2 = client.remote_activations2
-                    self.sc_clients[client_id].backward_center()
+
+            # backprop (center model) in sc_client
+            for c_id, sc_client in self.sc_clients.items():
+                if num_iters[c_id] != 0:
+                    sc_client.activations2 = self.clients[c_id].remote_activations2
+                    sc_client.backward_center()
+
+            # step optim and zero grad client back model
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
                     client.step_back()
                     client.back_scheduler.step()
                     client.zero_grad_back()
-                    self.sc_clients[client_id].center_optimizer.step()
-                    #self.sc_client[client_id].center_scheduler.step()
-                    self.sc_clients[client_id].center_optimizer.zero_grad()
+
+            # step optim and zero grad sc_client center model
+            for c_id, sc_client in self.sc_clients.items():
+                if num_iters[c_id] != 0:
+                    sc_client.center_optimizer.step()
+                    sc_client.center_scheduler.step()
+                    sc_client.center_optimizer.zero_grad()
+
+            # train f1 of every client in the current epoch in the current batch
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
                     f1=client.calculate_train_metric()
                     client.train_f1[-1] += f1 
-                    print("train f1 per iteration: ",iteration,f1)
-                    wandb.log({f'train f1 / iter: client {client_id}':f1.item()})
-                    #client.train_acc[-1] += client.calculate_train_flamby_acc()
+                    print("train f1 per iteration: ", f1)
+                    wandb.log({f'train f1 / iter: client {c_id}':f1.item()})
+
+            # reduce num_iters per client by 1
+            # training loop will only execute for a client if iters are left 
+            for c_id in self.client_ids:
+                if num_iters[c_id] != 0:
+                    num_iters[c_id] -= 1
+
         # calculate epoch metrics
         bal_accs, f1_macros = [], []
         avg_loss = 0
         for c_id, client in self.clients.items():
-            #num_iters = len(client.activation_mappings.keys())
-            client.train_f1[-1] /= client.num_iterations
-            print("Train f1",client.train_f1)
-            client.train_loss /= client.num_iterations
-            print("train loss",client.train_loss)
+            num_iters = len(client.activation_mappings.keys())
+            client.train_f1[-1] /= int(ceil(num_iters / client.train_batch_size))
+            client.train_loss /= int(ceil(num_iters / client.train_batch_size))
             avg_loss += client.train_loss
-            print("average loss",avg_loss)
             self.overall_f1['train'][-1] += client.train_f1[-1]
-            print("average f1",self.overall_f1['train'][-1])
-            #print("pred shape", client.train_preds)
-            print("target shape",client.train_targets)
             bal_acc_client, f1_macro_client = client.get_main_metric(mode='train') 
             bal_accs.append(bal_acc_client)
             f1_macros.append(f1_macro_client)
@@ -493,7 +525,7 @@ class ICTrainer:
             # merge model weights (center and back)
             self.merge_model_weights(epoch)
 
-    
+            
     @torch.no_grad()
     def test_one_epoch(self,epoch):
         """
@@ -508,7 +540,7 @@ class ICTrainer:
         """
 
         num_iters = self.create_iters(dl='test')
-        #max_iters = max(num_iters.values())
+        max_iters = max(num_iters.values())
         self.overall_f1['test'].append(0)
 
         for c_id, client in self.clients.items():
@@ -516,40 +548,52 @@ class ICTrainer:
             client.y = []
 
         # set keys
-        #for c_id, sc_client in self.sc_clients.items():
-        #    sc_client.all_keys = list(sc_client.test_activation_mappings.keys())
-        for client_id, client in tqdm(self.clients.items()):
-                #client.train_acc.append(0)
-                #client.loss_record.append(0)
-                client.iterator = iter(client.test_DataLoader)
-                #for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
-                for iteration in tqdm(range(client.num_test_iterations)):
-                    client.forward_front_key_value_test()
-                    #sc_clients[client_id].remote_activations1 = client.remote_activations1
-                    self.sc_clients[client_id].batchkeys = client.key
-                    self.sc_clients[client_id].forward_center_front()
-                    self.sc_clients[client_id].forward_center_back()
-                    client.remote_activations2 = self.sc_clients[client_id].remote_activations2
+        for c_id, sc_client in self.sc_clients.items():
+            sc_client.all_keys = list(sc_client.test_activation_mappings.keys())
+
+        # per iteration in testing epoch, do the following:
+        for it in tqdm(range(max_iters)):
+
+            # forward server-side center_back model with activations
+            for c_id, sc_client in self.sc_clients.items():
+                if num_iters[c_id] != 0:
+                    sc_client.current_keys=list(np.random.choice(sc_client.all_keys, min(self.clients[c_id].test_batch_size, len(sc_client.all_keys)), replace=False))
+                    sc_client.update_all_keys()
+                    sc_client.middle_activations=torch.Tensor(np.array([sc_client.test_activation_mappings[x] for x in sc_client.current_keys])).to(self.device).detach().requires_grad_(True)
+
+                    sc_client.forward_center_back()
+
+            # forward client-side back model with activations
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
+                    client.current_keys = self.sc_clients[c_id].current_keys
+                    client.remote_activations2 = self.sc_clients[c_id].remote_activations2
+
                     client.forward_back()
+                    client.set_test_targets()
+
+            # calculate test loss
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
                     client.calculate_loss(mode='test')
-                    wandb.log({'train step loss': client.loss.item()})
-                    #client.calculate_flamby_loss()         #calculate_loss()
-                    #client.loss_record[-1]+=client.calculate_flamby_loss()
-                    #client.loss.backward()
-                    #self.sc_clients[client_id].remote_activations2 = client.remote_activations2
-                    #self.sc_clients[client_id].backward_center()
-                    #client.step_back()
-                    #client.back_scheduler.step()
-                    #client.zero_grad_back()
-                    #self.sc_clients[client_id].center_optimizer.step()
-                    #self.sc_client[client_id].center_scheduler.step()
-                    #self.sc_clients[client_id].center_optimizer.zero_grad()
+                    wandb.log({'test step loss': client.loss.item()})
+
+            # test f1 of every client in the current epoch in the current batch
+            for c_id, client in self.clients.items():
+                if num_iters[c_id] != 0:
                     f1=client.calculate_test_metric()
                     client.test_f1[-1] += f1 
-                    print("validation f1 per iteration: ",iteration,f1)
-                    wandb.log({f'Validation f1 / iter: client {client_id}':f1.item()})
-                    
-                # calculate epoch metrics
+                    print("test f1 per iteration: ", f1)
+                    wandb.log({f'test f1 / iter: client {c_id}':f1.item()})
+
+            # reduce num_iters per client by 1
+            # testing loop will only execute for a client if iters are left 
+            for c_id in self.client_ids:
+                if num_iters[c_id] != 0:
+                    num_iters[c_id] -= 1
+
+        
+        # calculate epoch metrics
         avg_loss = 0
         bal_accs,f1_macros = [], []
         for c_id, client in self.clients.items():
@@ -592,48 +636,7 @@ class ICTrainer:
         
         return False # don't save
 
-        """         # per iteration in testing epoch, do the following:
-        for it in tqdm(range(max_iters)):
 
-            # forward server-side center_back model with activations
-            for c_id, sc_client in self.sc_clients.items():
-                if num_iters[c_id] != 0:
-                    sc_client.current_keys=list(np.random.choice(sc_client.all_keys, min(self.clients[c_id].test_batch_size, len(sc_client.all_keys)), replace=False))
-                    sc_client.update_all_keys()
-                    sc_client.middle_activations=torch.Tensor(np.array([sc_client.test_activation_mappings[x] for x in sc_client.current_keys])).to(self.device).detach().requires_grad_(True)
-
-                    sc_client.forward_center_back()
-
-            # forward client-side back model with activations
-            for c_id, client in self.clients.items():
-                if num_iters[c_id] != 0:
-                    client.current_keys = self.sc_clients[c_id].current_keys
-                    client.remote_activations2 = self.sc_clients[c_id].remote_activations2
-
-                    client.forward_back()
-                    client.set_test_targets()
-
-            # calculate test loss
-            for c_id, client in self.clients.items():
-                if num_iters[c_id] != 0:
-                    client.calculate_loss(mode='test')
-                    wandb.log({'test step loss': client.loss.item()})
-
-            # test f1 of every client in the current epoch in the current batch
-            for c_id, client in self.clients.items():
-                if num_iters[c_id] != 0:
-                    f1=client.calculate_test_metric()
-                    client.test_f1[-1] += f1 
-                    print("test f1 per iteration: ", f1)
-                    wandb.log({f'test f1 / iter: client {c_id}':f1.item()})
-
-            # reduce num_iters per client by 1
-            # testing loop will only execute for a client if iters are left 
-            for c_id in self.client_ids:
-                if num_iters[c_id] != 0:
-                    num_iters[c_id] -= 1
-            """
-        
     def save_models(self,):
         """
         save client-side back and server-side center_back models to disk
