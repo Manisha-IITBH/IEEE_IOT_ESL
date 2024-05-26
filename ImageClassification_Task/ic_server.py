@@ -52,7 +52,9 @@ class ConnectedClient(object):
         self.all_keys=[]
         self.current_keys=[]
         self.batchkeys = None
+        self.test_batchkeys = None
         self.kv_flag=0
+        self.kv_test_flag=0
 
         self.a1 = None
         self.a2 = None
@@ -117,34 +119,35 @@ class ConnectedClient(object):
             
             
     def forward_center_front_test(self):
-        if self.kv_flag==1:
+        if self.kv_test_flag==1:
             print("Size of remote_activations1:", self.remote_activations1.size())
             self.middle_activations=self.center_front_model(self.remote_activations1)
             print("Size of middle_activations:", self.middle_activations.size())
             local_middle_activations=list(self.middle_activations.cpu().detach().numpy())
-            print("Length of batchkey",len(self.batchkeys))
-            for i in range(0, len(self.batchkeys)):
-                print(self.batchkeys[i])
-                self.test_activation_mappings[self.batchkeys[i]]=local_middle_activations[i]
+            print("Length of batchkey",len(self.test_batchkeys))
+            for i in range(0, len(self.test_batchkeys)):
+                print(self.test_batchkeys[i])
+                self.test_activation_mappings[self.test_batchkeys[i]]=local_middle_activations[i]
             
         else:
             # Ensure all keys in batchkeys exist in activation_mappings
-            missing_keys = [key for key in self.batchkeys if key not in self.test_activation_mappings]
-            if missing_keys:
-                print(f"Warning: Missing keys in activation_mappings: {missing_keys}")
+            missing_test_keys = [key for key in self.test_batchkeys if key not in self.test_activation_mappings]
+            if missing_test_keys:
+                print(f"Warning: Missing keys in activation_mappings: {missing_test_keys}")
 
             # Retrieve activations for batchkeys from activation_mappings
-            valid_keys = [key for key in self.batchkeys if key in self.test_activation_mappings]
-            if not valid_keys:
+            valid_test_keys = [key for key in self.test_batchkeys if key in self.test_activation_mappings]
+            if not valid_test_keys:
                 print("Error: No valid keys found in activation_mappings.")
                 return
-
+            print("valid keys", valid_test_keys)
             # Convert the list of numpy arrays to a single numpy array
-            activations_list = [self.test_activation_mappings[key] for key in valid_keys]
-            activations_array = np.array(activations_list)
+            activations_test_list = [self.test_activation_mappings[key] for key in valid_test_keys]
+            activations_test_array = np.array(activations_test_list)
             
             # Convert the numpy array to a tensor and move it to the appropriate device
-            self.middle_activations = torch.tensor(activations_array, device=self.device)
+            self.middle_activations = torch.tensor(activations_test_array, device=self.device)
+            print("Size of middle_activations:", self.middle_activations.size())
             print("Middle activations created from validation activation_mappings based on batchkeys.")
 
     def forward_center_front_test_old(self):

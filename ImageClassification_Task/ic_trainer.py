@@ -360,8 +360,8 @@ class ICTrainer:
             print("For Test dataset")
             # create iterators for initial forward pass of testing phase
             for c_id, client in self.clients.items():
-                client.kv_flag=1
-                self.sc_clients[c_id].kv_flag=1
+                client.kv_test_flag=1
+                self.sc_clients[c_id].kv_test_flag=1
                 client.num_test_iterations = len(client.test_DataLoader)
                 client.test_iterator = iter(client.test_DataLoader)
                 
@@ -374,13 +374,13 @@ class ICTrainer:
                 #    if client.data_key % len(client.train_dataset) == 0:
                     client.forward_front_key_value_test()
                     self.sc_clients[c_id].remote_activations1 = client.remote_activations1
-                    self.sc_clients[c_id].batchkeys = client.key
+                    self.sc_clients[c_id].test_batchkeys = client.test_key
                     self.sc_clients[c_id].forward_center_front_test()
-                print("Test Dictionary keys Length:", len(list(self.sc_clients[c_id].test_activation_mappings.keys())))
+                print("Test Dictionary keys Length:", list(self.sc_clients[c_id].test_activation_mappings.keys()))
                 print("Test Dictionary Created")
                 #print("Dictionary keys Length:", len(list(self.sc_clients[c_id].activation_mappings.keys())))
-                client.kv_flag=0
-                self.sc_clients[c_id].kv_flag=0
+                client.kv_test_flag=0
+                self.sc_clients[c_id].kv_test_flag=0
 
     def populate_key_value_store(self,):
         """
@@ -526,12 +526,13 @@ class ICTrainer:
                 for iteration in tqdm(range(client.num_test_iterations)):
                     client.forward_front_key_value_test()
                     #sc_clients[client_id].remote_activations1 = client.remote_activations1
-                    self.sc_clients[client_id].batchkeys = client.key
-                    self.sc_clients[client_id].forward_center_front()
+                    self.sc_clients[client_id].test_batchkeys = client.test_key
+                    self.sc_clients[client_id].forward_center_front_test()
                     self.sc_clients[client_id].forward_center_back()
                     client.remote_activations2 = self.sc_clients[client_id].remote_activations2
                     client.forward_back()
                     client.calculate_loss(mode='test')
+                    print("loss calculated")
                     wandb.log({'train step loss': client.loss.item()})
                     #client.calculate_flamby_loss()         #calculate_loss()
                     #client.loss_record[-1]+=client.calculate_flamby_loss()
@@ -544,7 +545,9 @@ class ICTrainer:
                     #self.sc_clients[client_id].center_optimizer.step()
                     #self.sc_client[client_id].center_scheduler.step()
                     #self.sc_clients[client_id].center_optimizer.zero_grad()
+                    print("calculate loss metric")
                     f1=client.calculate_test_metric()
+                    print("done")
                     client.test_f1[-1] += f1 
                     print("validation f1 per iteration: ",iteration,f1)
                     wandb.log({f'Validation f1 / iter: client {client_id}':f1.item()})
