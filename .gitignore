@@ -8,4 +8,4 @@ wandb
 !overhead_analysis/*.ipynb
 /cifar-10-python.tar.gz
 *.csv
-.fuse_*
+.fuse_hidden002115d900000006
