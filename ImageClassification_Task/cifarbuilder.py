@@ -6,6 +6,61 @@ from sklearn.model_selection import train_test_split
 from PIL import Image
 import pandas as pd
 
+import numpy as np
+import pandas as pd
+
+def setting2_dirch_val(train_full_dataset, test_full_dataset, num_users):
+    np.random.seed(42)  # Set the seed for reproducibility
+    dict_users, dict_users_test, dict_users_val = {}, {}, {}
+    for i in range(num_users):
+        dict_users[i] = []
+        dict_users_test[i] = []
+        dict_users_val[i] = []
+
+    # Create DataFrames
+    df = pd.DataFrame(list(zip(train_full_dataset.data, train_full_dataset.targets)), columns=['images', 'labels'])
+    df_test = pd.DataFrame(list(zip(test_full_dataset.data, test_full_dataset.targets)), columns=['images', 'labels'])
+    num_of_classes = df['labels'].nunique()
+
+    # Initialize class-wise indices
+    dict_classwise = {i: df[df['labels'] == i].index.values.astype(int) for i in range(num_of_classes)}
+    dict_classwise_test = {i: df_test[df_test['labels'] == i].index.values.astype(int) for i in range(num_of_classes)}
+
+    # Sample sizes per client
+    total_train_samples_per_client = 500
+    total_test_samples_per_client = 1000
+    total_val_samples_per_client = 250
+
+    for i in range(num_users):
+        dirichlet_dist = np.random.dirichlet(np.ones(num_of_classes)*0.9)
+        num_samples_train = np.round(dirichlet_dist * total_train_samples_per_client).astype(int)
+        num_samples_test = np.round(dirichlet_dist * total_test_samples_per_client).astype(int)
+        num_samples_val = np.round(dirichlet_dist * total_val_samples_per_client).astype(int)
+
+        for j in range(num_of_classes):
+            # Sampling training data
+            train_indices = sample_data(dict_classwise, j, num_samples_train[j])
+            dict_users[i].extend(train_indices)
+            dict_classwise[j] = list(set(dict_classwise[j]) - set(train_indices))
+
+            # Sampling test data
+            test_indices = sample_data(dict_classwise_test, j, num_samples_test[j], replace=True)
+            dict_users_test[i].extend(test_indices)
+
+            # Sampling validation data
+            val_indices = sample_data(dict_classwise, j, num_samples_val[j])
+            dict_users_val[i].extend(val_indices)
+            dict_classwise[j] = list(set(dict_classwise[j]) - set(val_indices))
+
+    return dict_users, dict_users_test, dict_users_val
+
+def sample_data(data_dict, class_index, num_samples, replace=False):
+    population_size = len(data_dict[class_index])
+    if num_samples > population_size:
+        num_samples = population_size
+    return list(np.random.choice(data_dict[class_index], num_samples, replace=replace))
+
+'''
 def setting2_dirch_val(train_full_dataset, test_full_dataset, num_users):
     np.random.seed(42)  # Set the seed for reproducibility
     dict_users, dict_users_test, dict_users_val = {}, {}, {}
@@ -33,6 +88,7 @@ def setting2_dirch_val(train_full_dataset, test_full_dataset, num_users):
 
     for i in range(num_users):
         dirichlet_dist = np.random.dirichlet(np.ones(num_of_classes))
+        #print(f'for {i} dirchlet dist {dirichlet_dist}')
         num_samples_train = np.round(dirichlet_dist * total_train_samples_per_client).astype(int)
         num_samples_test = np.round(dirichlet_dist * total_test_samples_per_client).astype(int)
         num_samples_val = np.round(dirichlet_dist * total_val_samples_per_client).astype(int)
@@ -62,7 +118,7 @@ def setting2_dirch_val(train_full_dataset, test_full_dataset, num_users):
             dict_users_val[i].extend(temp_val)
             dict_classwise[j] = list(set(dict_classwise[j]) - set(temp_val))
 
-    return dict_users, dict_users_test, dict_users_val
+    return dict_users, dict_users_test, dict_users_val'''
 
 class CIFAR10Dataset(Dataset):
     def __init__(self, images, labels, client_id, dataset_type, tfms):

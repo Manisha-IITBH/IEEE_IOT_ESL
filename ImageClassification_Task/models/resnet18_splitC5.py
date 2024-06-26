@@ -60,7 +60,6 @@ class center_back(nn.Module):
         m = resnet18()
         self.l3 = m.layer3
         self.l4 = m.layer4
-        self.l5 = m.avgpool
 
     def freeze(self,epoch,pretrained):
         for p in self.parameters():
@@ -69,26 +68,29 @@ class center_back(nn.Module):
     def forward(self, x):
         x = self.l3(x)
         x = self.l4(x)
-        x = self.l5(x)
         return x
     
 
 class back(nn.Module):
     def __init__(self,):
         super().__init__()
-        self.fl = nn.Flatten()
-        self.fc = nn.Linear(512, 10)
+        self.conv_dw = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, groups=512)
+        self.conv_dw1 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=1)
+        self.bn = nn.BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        self.pool = nn.AdaptiveAvgPool2d(output_size=(1, 1))
+        self.fl = nn.Flatten(start_dim=1, end_dim=-1)
+        self.fc = nn.Linear(in_features=512, out_features=10, bias=True)
         
     def forward(self, x):
+        x = self.conv_dw(x)
+        x = self.conv_dw1(x)
+        x = self.bn(x)
+        x = self.pool(x)
         x = self.fl(x)
         x = self.fc(x)
         return x
     
 # Instantiate the model and print its architecture
-
-m = resnet18()
-print(m)
-
 front_model = front()
 print("Front Model:")
 print(front_model)

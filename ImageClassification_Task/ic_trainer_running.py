@@ -99,29 +99,7 @@ class ICTrainer:
             client.create_DataLoader(
                 self.train_batch_size,
                 self.test_batch_size
-            )
-            '''
-            # Check for duplicate IDs in train dataset
-            train_ids = [sample['id'] for sample in train_ds]
-            print(train_ids)
-            #if len(train_ids) != len(set(train_ids)):
-            #    print(f"Warning: Duplicate IDs found in train dataset of client {c_id}")
-
-            # Check for duplicate IDs in test dataset
-            test_ids = [sample['id'] for sample in test_ds]
-            print(test_ids)
-            #if len(test_ids) != len(set(test_ids)):
-            #    print(f"Warning: Duplicate IDs found in test dataset of client {c_id}")
-
-            # Check for duplicate IDs in main test dataset
-            main_test_ids = [sample['id'] for sample in main_test_ds]
-            print(main_test_ids)
-            #if len(main_test_ids) != len(set(main_test_ids)):
-            #    print(f"Warning: Duplicate IDs found in main test dataset of client {c_id}")
-
-        print(f'generated {self.num_clients} clients with data')'''
-
-    
+            )    
     
     def init_client_models_optims(self, input_channels=1):
         """
@@ -151,12 +129,12 @@ class ICTrainer:
             try:
                 client.back_model = model.back().to(self.device)
                 client.back_optimizer = AdamW(client.back_model.parameters(), lr=lr, weight_decay=3e-2)
-                client.back_scheduler = CosineAnnealingWarmRestarts(
-                    client.back_optimizer,
-                    T_0=20,
-                    T_mult=1,
-                    eta_min=1e-10
-                )
+                #client.back_scheduler = CosineAnnealingWarmRestarts(
+                #    client.back_optimizer,
+                #    T_0=20,
+                #    T_mult=1,
+                #    eta_min=1e-10
+                #)
             except AttributeError as e:
                 print(f"Error initializing back model or optimizer for client {c_id}: {e}")
                 continue
@@ -196,12 +174,12 @@ class ICTrainer:
             try:
                 sc_client.center_back_model = model.center_back().to(self.device)
                 sc_client.center_optimizer = AdamW(sc_client.center_back_model.parameters(), lr=lr, weight_decay=3e-2)
-                sc_client.center_scheduler = CosineAnnealingWarmRestarts(
-                    sc_client.center_optimizer,
-                    T_0=20,
-                    T_mult=1,
-                    eta_min=1e-10
-                )
+                #sc_client.center_scheduler = CosineAnnealingWarmRestarts(
+                #    sc_client.center_optimizer,
+                #    T_0=20,
+                #    T_mult=1,
+                #    eta_min=1e-10
+                #)
             except AttributeError as e:
                 print(f"Error initializing center back model or optimizer for server copy of client {c_id}: {e}")
                 continue
@@ -469,7 +447,7 @@ class ICTrainer:
                     self.sc_clients[client_id].remote_activations2 = client.remote_activations2
                     self.sc_clients[client_id].backward_center()
                     client.step_back()
-                    client.back_scheduler.step()
+                    #client.back_scheduler.step()
                     client.zero_grad_back()
                     self.sc_clients[client_id].center_optimizer.step()
                     #self.sc_client[client_id].center_scheduler.step()
@@ -509,6 +487,7 @@ class ICTrainer:
         f1_macro = np.array(f1_macros).mean()
         self.overall_f1['train'][-1] /= self.num_clients
         print("train f1: ", self.overall_f1['train'][-1])
+        print("train acc: ", bal_acc)
         wandb.log({'avg train f1 all clients': self.overall_f1['train'][-1].item()})
         wandb.log({'avg train bal acc all clients': bal_acc})
         wandb.log({'avg train f1 macro all clients': f1_macro})
@@ -546,7 +525,9 @@ class ICTrainer:
         for client_id, client in tqdm(self.clients.items()):
                 #client.train_acc.append(0)
                 #client.loss_record.append(0)
-                client.iterator = iter(client.test_DataLoader)
+                #client.iterator = iter(client.test_DataLoader)
+                client.num_test_iterations = len(client.test_DataLoader)
+                client.test_iterator = iter(client.test_DataLoader)
                 #for it in tqdm(range(client.num_iterations * self.args.kv_factor),desc="client front"):
                 for iteration in tqdm(range(client.num_test_iterations)):
                     client.forward_front_key_value_test()
@@ -601,12 +582,28 @@ class ICTrainer:
         f1_macro = np.array(f1_macros).mean()
         self.overall_f1['test'][-1] /= self.num_clients
         print("test f1: ", self.overall_f1['test'][-1])
+        print("test acc: ", bal_acc)
         wandb.log({'avg test f1 all clients': self.overall_f1['test'][-1].item()})
         wandb.log({'avg test bal acc all clients': bal_acc})
         wandb.log({'avg test f1 macro all clients': bal_acc})
         wandb.log({'avg test loss all clients': avg_loss / self.num_clients})
-
+        
+        
         # max f1 score achieved on test dataset
+        #if(bal_acc > self.max_acc):
+        #    self.max_acc=bal_acc
+        #    self.max_epoch=epoch
+        #    print(f"MAX val acc score: {self.max_acc} @ epoch {self.max_epoch}")
+        #    wandb.log({
+        #        'max test f1 score':self.max_acc.item(),
+        #        'max_test_f1_epoch':self.max_epoch
+        #    })
+        #    # save at best model
+        #    return True
+        
+        #return False # don't save
+        
+        """# max f1 score achieved on test dataset
         if(self.overall_f1['test'][-1]> self.max_f1['f1']):
             self.max_f1['f1']=self.overall_f1['test'][-1]
             self.max_f1['epoch']=epoch
@@ -620,7 +617,7 @@ class ICTrainer:
         
         return False # don't save
 
-        """         # per iteration in testing epoch, do the following:
+                 # per iteration in testing epoch, do the following:
         for it in tqdm(range(max_iters)):
 
             # forward server-side center_back model with activations
@@ -716,7 +713,7 @@ class ICTrainer:
 
         print("RUNNING INFERENCE from the best models on test dataset")
 
-        self.load_best_models()
+        #self.load_best_models()
         avg_acc=0
         for c_id in self.client_ids:
 
@@ -814,12 +811,13 @@ class ICTrainer:
                 self.clients[c_id].back_model.eval()
                 self.sc_clients[c_id].center_back_model.eval()
 
-            is_best = self.test_one_epoch(epoch)
-
-            if is_best:
-                self.save_models()
+            #is_best = self.test_one_epoch(epoch)
+            self.test_one_epoch(epoch)
+            #if is_best:
+            #    self.save_models()
 
             self.clear_cache()
+            self.inference()
 
         # final metrics
         print(f'\n\n\n{"::"*10}BEST METRICS{"::"*10}')
@@ -885,6 +883,9 @@ class ICTrainer:
         self.test_batch_size = self.args.test_batch_size
 
         self.personalization_mode = False
+        
+        self.max_acc = 0
+        self.max_epoch = 0
 
         self.init_clients_with_data()
 

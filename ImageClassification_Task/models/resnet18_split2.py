@@ -59,8 +59,8 @@ class center_back(nn.Module):
         super().__init__()
         m = resnet18()
         self.l3 = m.layer3
-        self.l4 = m.layer4
-        self.l5 = m.avgpool
+        self.l4_0 = m.layer4[0]
+        
 
     def freeze(self,epoch,pretrained):
         for p in self.parameters():
@@ -68,18 +68,21 @@ class center_back(nn.Module):
         
     def forward(self, x):
         x = self.l3(x)
-        x = self.l4(x)
-        x = self.l5(x)
+        x = self.l4_0(x)
         return x
     
 
 class back(nn.Module):
     def __init__(self,):
         super().__init__()
+        self.l4_1 = m.layer4[1:]
+        self.l5 = m.avgpool
         self.fl = nn.Flatten()
         self.fc = nn.Linear(512, 10)
         
     def forward(self, x):
+        x = self.l4_1(x)
+        x = self.l5(x)
         x = self.fl(x)
         x = self.fc(x)
         return x
