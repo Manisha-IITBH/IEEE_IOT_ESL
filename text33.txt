@@ -1,0 +1,879 @@
+{'batch_size': 64,
+ 'client_lr': 0.001,
+ 'dataset': 'CIFAR10',
+ 'dynamic': False,
+ 'epochs': 80,
+ 'kv_factor': 1,
+ 'kv_refresh_rate': 0,
+ 'model': 'resnet18',
+ 'number_of_clients': 10,
+ 'offload_only': False,
+ 'p_epoch': 50,
+ 'personalize': False,
+ 'pool': False,
+ 'pretrained': True,
+ 'seed': 42,
+ 'server_lr': 0.001,
+ 'split': 3,
+ 'test_batch_size': 256,
+ 'use_key_value_store': True,
+ 'wandb': True,
+ 'wandb_name': None}
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client hbrp -> #train 500 #valid: 248 #test: 1001
+Client hbrp class distribution (proportions):
+  Train: {0: 0.046, 1: 0.294, 2: 0.128, 3: 0.088, 4: 0.016, 5: 0.016, 6: 0.006, 7: 0.196, 8: 0.09, 9: 0.12}
+  Test: {0: 0.04435483870967742, 1: 0.29435483870967744, 2: 0.12903225806451613, 3: 0.08870967741935484, 4: 0.016129032258064516, 5: 0.016129032258064516, 6: 0.004032258064516129, 7: 0.1975806451612903, 8: 0.08870967741935484, 9: 0.12096774193548387}
+  Main Test: {0: 0.04595404595404595, 1: 0.29270729270729273, 2: 0.12787212787212787, 3: 0.08891108891108891, 4: 0.016983016983016984, 5: 0.016983016983016984, 6: 0.005994005994005994, 7: 0.1958041958041958, 8: 0.08891108891108891, 9: 0.11988011988011989}
+Client hbrp class distribution:
+  Train: Counter({1: 147, 7: 98, 2: 64, 9: 60, 8: 45, 3: 44, 0: 23, 4: 8, 5: 8, 6: 3})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client oig9 -> #train 499 #valid: 251 #test: 1001
+Client oig9 class distribution (proportions):
+  Train: {0: 0.11623246492985972, 1: 0.09418837675350701, 2: 0.19839679358717435, 3: 0.03406813627254509, 4: 0.10220440881763528, 5: 0.25250501002004005, 6: 0.03006012024048096, 7: 0.02404809619238477, 8: 0.1062124248496994, 9: 0.04208416833667335}
+  Test: {0: 0.11553784860557768, 1: 0.09561752988047809, 2: 0.199203187250996, 3: 0.035856573705179286, 4: 0.099601593625498, 5: 0.250996015936255, 6: 0.027888446215139442, 7: 0.02390438247011952, 8: 0.10756972111553785, 9: 0.043824701195219126}
+  Main Test: {0: 0.11588411588411589, 1: 0.09490509490509491, 2: 0.19880119880119881, 3: 0.03396603396603397, 4: 0.1018981018981019, 5: 0.25074925074925075, 6: 0.029970029970029972, 7: 0.024975024975024976, 8: 0.10589410589410589, 9: 0.04295704295704296}
+Client oig9 class distribution:
+  Train: Counter({5: 126, 2: 99, 0: 58, 8: 53, 4: 51, 1: 47, 9: 21, 3: 17, 6: 15, 7: 12})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client f2cb -> #train 500 #valid: 251 #test: 1001
+Client f2cb class distribution (proportions):
+  Train: {0: 0.092, 1: 0.134, 2: 0.078, 3: 0.04, 4: 0.086, 5: 0.118, 6: 0.114, 7: 0.14, 8: 0.196, 9: 0.002}
+  Test: {0: 0.09163346613545817, 1: 0.13147410358565736, 2: 0.0796812749003984, 3: 0.0398406374501992, 4: 0.08764940239043825, 5: 0.11952191235059761, 6: 0.11155378486055777, 7: 0.1394422310756972, 8: 0.1952191235059761, 9: 0.00398406374501992}
+  Main Test: {0: 0.0919080919080919, 1: 0.13286713286713286, 2: 0.07792207792207792, 3: 0.03996003996003996, 4: 0.08691308691308691, 5: 0.11888111888111888, 6: 0.11388611388611389, 7: 0.13886113886113885, 8: 0.1958041958041958, 9: 0.002997002997002997}
+Client f2cb class distribution:
+  Train: Counter({8: 98, 7: 70, 1: 67, 5: 59, 6: 57, 0: 46, 4: 43, 2: 39, 3: 20, 9: 1})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client fno7 -> #train 501 #valid: 250 #test: 999
+Client fno7 class distribution (proportions):
+  Train: {0: 0.06786427145708583, 1: 0.07584830339321358, 2: 0.04790419161676647, 3: 0.3333333333333333, 4: 0.043912175648702596, 5: 0.04590818363273453, 6: 0.1377245508982036, 7: 0.1936127744510978, 8: 0.027944111776447105, 9: 0.02594810379241517}
+  Test: {0: 0.068, 1: 0.076, 2: 0.048, 3: 0.332, 4: 0.044, 5: 0.044, 6: 0.14, 7: 0.196, 8: 0.028, 9: 0.024}
+  Main Test: {0: 0.06906906906906907, 1: 0.07507507507507508, 2: 0.04704704704704705, 3: 0.33433433433433435, 4: 0.044044044044044044, 5: 0.04504504504504504, 6: 0.13813813813813813, 7: 0.1941941941941942, 8: 0.028028028028028028, 9: 0.025025025025025027}
+Client fno7 class distribution:
+  Train: Counter({3: 167, 7: 97, 6: 69, 1: 38, 0: 34, 2: 24, 5: 23, 4: 22, 8: 14, 9: 13})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client b0m9 -> #train 502 #valid: 247 #test: 999
+Client b0m9 class distribution (proportions):
+  Train: {0: 0.22111553784860558, 1: 0.061752988047808766, 2: 0.013944223107569721, 3: 0.09760956175298804, 4: 0.08565737051792828, 5: 0.13346613545816732, 6: 0.2051792828685259, 7: 0.14143426294820718, 8: 0.00398406374501992, 9: 0.035856573705179286}
+  Test: {0: 0.22267206477732793, 1: 0.06072874493927125, 2: 0.012145748987854251, 3: 0.09716599190283401, 4: 0.08502024291497975, 5: 0.13360323886639677, 6: 0.20647773279352227, 7: 0.1417004048582996, 8: 0.004048582995951417, 9: 0.03643724696356275}
+  Main Test: {0: 0.2222222222222222, 1: 0.06106106106106106, 2: 0.013013013013013013, 3: 0.0980980980980981, 4: 0.08508508508508508, 5: 0.13413413413413414, 6: 0.20520520520520522, 7: 0.14114114114114115, 8: 0.004004004004004004, 9: 0.036036036036036036}
+Client b0m9 class distribution:
+  Train: Counter({0: 111, 6: 103, 7: 71, 5: 67, 3: 49, 4: 43, 1: 31, 9: 18, 2: 7, 8: 2})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client 1o3r -> #train 500 #valid: 250 #test: 1000
+Client 1o3r class distribution (proportions):
+  Train: {0: 0.038, 1: 0.042, 2: 0.164, 3: 0.096, 4: 0.072, 5: 0.036, 6: 0.062, 7: 0.054, 8: 0.066, 9: 0.37}
+  Test: {0: 0.04, 1: 0.044, 2: 0.164, 3: 0.096, 4: 0.072, 5: 0.036, 6: 0.064, 7: 0.052, 8: 0.064, 9: 0.368}
+  Main Test: {0: 0.039, 1: 0.042, 2: 0.163, 3: 0.096, 4: 0.072, 5: 0.037, 6: 0.062, 7: 0.054, 8: 0.065, 9: 0.37}
+Client 1o3r class distribution:
+  Train: Counter({9: 185, 2: 82, 3: 48, 4: 36, 8: 33, 6: 31, 7: 27, 1: 21, 0: 19, 5: 18})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client ak2v -> #train 499 #valid: 250 #test: 1000
+Client ak2v class distribution (proportions):
+  Train: {0: 0.07214428857715431, 1: 0.052104208416833664, 2: 0.04008016032064128, 3: 0.3527054108216433, 4: 0.10220440881763528, 5: 0.06212424849699399, 6: 0.08016032064128256, 7: 0.15831663326653306, 8: 0.028056112224448898, 9: 0.052104208416833664}
+  Test: {0: 0.072, 1: 0.052, 2: 0.04, 3: 0.352, 4: 0.104, 5: 0.06, 6: 0.08, 7: 0.16, 8: 0.028, 9: 0.052}
+  Main Test: {0: 0.072, 1: 0.052, 2: 0.041, 3: 0.352, 4: 0.102, 5: 0.062, 6: 0.079, 7: 0.159, 8: 0.029, 9: 0.052}
+Client ak2v class distribution:
+  Train: Counter({3: 176, 7: 79, 4: 51, 6: 40, 0: 36, 5: 31, 1: 26, 9: 26, 2: 20, 8: 14})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client rjnv -> #train 499 #valid: 250 #test: 1000
+Client rjnv class distribution (proportions):
+  Train: {0: 0.12424849699398798, 1: 0.11022044088176353, 2: 0.002004008016032064, 3: 0.002004008016032064, 4: 0.4529058116232465, 5: 0.004008016032064128, 6: 0.004008016032064128, 7: 0.1062124248496994, 8: 0.14829659318637275, 9: 0.04609218436873747}
+  Test: {0: 0.124, 1: 0.112, 3: 0.004, 4: 0.452, 5: 0.004, 6: 0.004, 7: 0.104, 8: 0.148, 9: 0.048}
+  Main Test: {0: 0.124, 1: 0.111, 2: 0.002, 3: 0.003, 4: 0.452, 5: 0.005, 6: 0.004, 7: 0.105, 8: 0.148, 9: 0.046}
+Client rjnv class distribution:
+  Train: Counter({4: 226, 8: 74, 0: 62, 1: 55, 7: 53, 9: 23, 5: 2, 6: 2, 2: 1, 3: 1})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client gfyw -> #train 499 #valid: 250 #test: 1000
+Client gfyw class distribution (proportions):
+  Train: {0: 0.15030060120240482, 1: 0.1523046092184369, 2: 0.03406813627254509, 3: 0.1462925851703407, 4: 0.1062124248496994, 5: 0.08817635270541083, 6: 0.12424849699398798, 7: 0.06212424849699399, 8: 0.028056112224448898, 9: 0.10821643286573146}
+  Test: {0: 0.152, 1: 0.152, 2: 0.036, 3: 0.148, 4: 0.104, 5: 0.088, 6: 0.124, 7: 0.06, 8: 0.028, 9: 0.108}
+  Main Test: {0: 0.151, 1: 0.151, 2: 0.035, 3: 0.147, 4: 0.106, 5: 0.089, 6: 0.124, 7: 0.062, 8: 0.028, 9: 0.107}
+Client gfyw class distribution:
+  Train: Counter({1: 76, 0: 75, 3: 73, 6: 62, 9: 54, 4: 53, 5: 44, 7: 31, 2: 17, 8: 14})
+Files already downloaded and verified
+Files already downloaded and verified
+Training
+Validation
+Testing
+client wqc4 -> #train 498 #valid: 250 #test: 1000
+Client wqc4 class distribution (proportions):
+  Train: {0: 0.0321285140562249, 1: 0.1646586345381526, 2: 0.06626506024096386, 3: 0.19477911646586346, 4: 0.05421686746987952, 5: 0.0642570281124498, 6: 0.2971887550200803, 7: 0.060240963855421686, 8: 0.012048192771084338, 9: 0.05421686746987952}
+  Test: {0: 0.032, 1: 0.164, 2: 0.068, 3: 0.196, 4: 0.056, 5: 0.064, 6: 0.296, 7: 0.06, 8: 0.012, 9: 0.052}
+  Main Test: {0: 0.032, 1: 0.163, 2: 0.067, 3: 0.195, 4: 0.055, 5: 0.065, 6: 0.297, 7: 0.061, 8: 0.012, 9: 0.053}
+Client wqc4 class distribution:
+  Train: Counter({6: 148, 3: 97, 1: 82, 2: 33, 5: 32, 7: 30, 4: 27, 9: 27, 0: 16, 8: 6})
+generated 10 clients with data
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=1000, bias=True)
+)
+Front Model:
+front(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (act1): ReLU(inplace=True)
+  (pool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+)
+
+Center Front Model:
+center_front(
+  (l1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (l2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+)
+
+Center Back Model:
+center_back(
+  (l3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+)
+
+Back Model:
+back(
+  (l4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (l5): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fl): Flatten(start_dim=1, end_dim=-1)
+  (fc): Linear(in_features=512, out_features=10, bias=True)
+)
+Initialized client-side model splits front & back and their optimizers
+Initialized server-side model splits center_front, center_back, and center_back optimizer
+Directory created at saved_models/CIFAR10/key_value_mode/model_split3
+generating training samples in key-value store...
+Training Set Key Value Store Created for Client hbrp
+Training Set Key Value Store Length is : 500
+Training Set Key Value Store Created for Client oig9
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client f2cb
+Training Set Key Value Store Length is : 500
+Training Set Key Value Store Created for Client fno7
+Training Set Key Value Store Length is : 501
+Training Set Key Value Store Created for Client b0m9
+Training Set Key Value Store Length is : 502
+Training Set Key Value Store Created for Client 1o3r
+Training Set Key Value Store Length is : 500
+Training Set Key Value Store Created for Client ak2v
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client rjnv
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client gfyw
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client wqc4
+Training Set Key Value Store Length is : 498
+generating testing samples in key-value store...
+Validation Set Key Value Store Created for Client hbrp
+Validation Set Key Value Store Length is : 248
+Validation Set Key Value Store Created for Client oig9
+Validation Set Key Value Store Length is : 251
+Validation Set Key Value Store Created for Client f2cb
+Validation Set Key Value Store Length is : 251
+Validation Set Key Value Store Created for Client fno7
+Validation Set Key Value Store Length is : 250
+Validation Set Key Value Store Created for Client b0m9
+Validation Set Key Value Store Length is : 247
+Validation Set Key Value Store Created for Client 1o3r
+Validation Set Key Value Store Length is : 250
+Validation Set Key Value Store Created for Client ak2v
+Validation Set Key Value Store Length is : 250
+Validation Set Key Value Store Created for Client rjnv
+Validation Set Key Value Store Length is : 250
+Validation Set Key Value Store Created for Client gfyw
+Validation Set Key Value Store Length is : 250
+Validation Set Key Value Store Created for Client wqc4
+Validation Set Key Value Store Length is : 250
+-------------------------
+
+commence training...
+
+
+
+
+Generalisation Phase Training 0..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.6320158243179321
+avg train accuracy all clients:  0.629775626201012
+Merging model weights at epoch 0
+Created list to store f1 score for test data.
+validation f1:  tensor(0.6759)
+validation acc:  0.6753247354320473
+0
+MAX Validation Accuracy Score: 0.6753247354320473 @ epoch 0
+True
+Model improved and saved.
+Save Model at epoch 0
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.6786412484412485
+
+
+Generalisation Phase Training 1..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.840636134147644
+avg train accuracy all clients:  0.8396928154216912
+Merging model weights at epoch 1
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8480)
+validation acc:  0.8474416706427522
+0.6753247354320473
+MAX Validation Accuracy Score: 0.8474416706427522 @ epoch 1
+True
+Model improved and saved.
+Save Model at epoch 1
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8342216161216163
+
+
+Generalisation Phase Training 2..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9245907068252563
+avg train accuracy all clients:  0.9243580702686082
+Merging model weights at epoch 2
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8514)
+validation acc:  0.8514412446596011
+0.8474416706427522
+MAX Validation Accuracy Score: 0.8514412446596011 @ epoch 2
+True
+Model improved and saved.
+Save Model at epoch 2
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8404261158261157
+
+
+Generalisation Phase Training 3..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9579192399978638
+avg train accuracy all clients:  0.9573678366898557
+Merging model weights at epoch 3
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8549)
+validation acc:  0.8554136878631484
+0.8514412446596011
+MAX Validation Accuracy Score: 0.8554136878631484 @ epoch 3
+True
+Model improved and saved.
+Save Model at epoch 3
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8377251106251105
+
+
+Generalisation Phase Training 4..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9801841974258423
+avg train accuracy all clients:  0.9799771287082846
+Merging model weights at epoch 4
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8647)
+validation acc:  0.8650316431023978
+0.8554136878631484
+MAX Validation Accuracy Score: 0.8650316431023978 @ epoch 4
+True
+Model improved and saved.
+Save Model at epoch 4
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8541232181232182
+
+
+Generalisation Phase Training 5..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9876455068588257
+avg train accuracy all clients:  0.9873895376153673
+Merging model weights at epoch 5
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8689)
+validation acc:  0.8690706254777156
+0.8650316431023978
+MAX Validation Accuracy Score: 0.8690706254777156 @ epoch 5
+True
+Model improved and saved.
+Save Model at epoch 5
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8537239198239199
+
+
+Generalisation Phase Training 6..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9900491833686829
+avg train accuracy all clients:  0.9899863583164408
+Merging model weights at epoch 6
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8782)
+validation acc:  0.8782353331352661
+0.8690706254777156
+MAX Validation Accuracy Score: 0.8782353331352661 @ epoch 6
+True
+Model improved and saved.
+Save Model at epoch 6
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8576179220179221
+
+
+Generalisation Phase Training 7..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9935547113418579
+avg train accuracy all clients:  0.9933959807742845
+Merging model weights at epoch 7
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8783)
+validation acc:  0.8786337401341481
+0.8782353331352661
+MAX Validation Accuracy Score: 0.8786337401341481 @ epoch 7
+True
+Model improved and saved.
+Save Model at epoch 7
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8547161222161224
+
+
+Generalisation Phase Training 8..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9976064562797546
+avg train accuracy all clients:  0.9975963895759197
+Merging model weights at epoch 8
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8808)
+validation acc:  0.8810854320214245
+0.8786337401341481
+MAX Validation Accuracy Score: 0.8810854320214245 @ epoch 8
+True
+Model improved and saved.
+Save Model at epoch 8
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8591172225172224
+
+
+Generalisation Phase Training 9..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.998046875
+avg train accuracy all clients:  0.9979967919775294
+Merging model weights at epoch 9
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8837)
+validation acc:  0.883899929184919
+0.8810854320214245
+MAX Validation Accuracy Score: 0.883899929184919 @ epoch 9
+True
+Model improved and saved.
+Save Model at epoch 9
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8651172253172253
+
+
+Generalisation Phase Training 10..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9994140863418579
+avg train accuracy all clients:  0.9993987975951903
+Merging model weights at epoch 10
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8966)
+validation acc:  0.8967113162083284
+0.883899929184919
+MAX Validation Accuracy Score: 0.8967113162083284 @ epoch 10
+True
+Model improved and saved.
+Save Model at epoch 10
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8736151306151306
+
+
+Generalisation Phase Training 11..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9990234375
+avg train accuracy all clients:  0.9989995991983968
+Merging model weights at epoch 11
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8967)
+validation acc:  0.89670657419948
+False
+
+
+Generalisation Phase Training 12..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.999804675579071
+avg train accuracy all clients:  0.9998000000000001
+Merging model weights at epoch 12
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8998)
+validation acc:  0.899913064367839
+0.8967113162083284
+MAX Validation Accuracy Score: 0.899913064367839 @ epoch 12
+True
+Model improved and saved.
+Save Model at epoch 12
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8849145374145374
+
+
+Generalisation Phase Training 13..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9994140863418579
+avg train accuracy all clients:  0.9993987975951903
+Merging model weights at epoch 13
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8867)
+validation acc:  0.8862886189602307
+False
+
+
+Generalisation Phase Training 14..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9995595812797546
+avg train accuracy all clients:  0.9995991983967937
+Merging model weights at epoch 14
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8990)
+validation acc:  0.8990936314816482
+False
+
+
+Generalisation Phase Training 15..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9993642568588257
+avg train accuracy all clients:  0.9993987975951903
+Merging model weights at epoch 15
+Created list to store f1 score for test data.
+validation f1:  tensor(0.9005)
+validation acc:  0.9006937089047493
+0.899913064367839
+MAX Validation Accuracy Score: 0.9006937089047493 @ epoch 15
+True
+Model improved and saved.
+Save Model at epoch 15
+Save Best Model for Generalisation Phase
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8836154381154382
+
+
+Generalisation Phase Training 16..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9993144869804382
+avg train accuracy all clients:  0.9993987975951903
+Merging model weights at epoch 16
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8945)
+validation acc:  0.8942902502046145
+False
+
+
+Generalisation Phase Training 17..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9985380172729492
+avg train accuracy all clients:  0.9985995991983968
+Merging model weights at epoch 17
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8899)
+validation acc:  0.8902935151909016
+False
+
+
+Generalisation Phase Training 18..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9989286661148071
+avg train accuracy all clients:  0.9989995991983968
+Merging model weights at epoch 18
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8973)
+validation acc:  0.896709605355514
+False
+
+
+Generalisation Phase Training 19..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9983876943588257
+avg train accuracy all clients:  0.9983975951903808
+Merging model weights at epoch 19
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8871)
+validation acc:  0.8874851602600957
+False
+
+
+Generalisation Phase Training 20..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  0.9993144869804382
+avg train accuracy all clients:  0.9993995975983904
+Merging model weights at epoch 20
+Created list to store f1 score for test data.
+validation f1:  tensor(0.8882)
+validation acc:  0.88789825751194
+False
+Early stopping at epoch 21
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8727184301184302
+personalizing, freezing server copy center model @ epoch 21
+Personalization Started
+Training Set Key Value Store Created for Client hbrp
+Training Set Key Value Store Length is : 500
+Training Set Key Value Store Created for Client oig9
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client f2cb
+Training Set Key Value Store Length is : 500
+Training Set Key Value Store Created for Client fno7
+Training Set Key Value Store Length is : 501
+Training Set Key Value Store Created for Client b0m9
+Training Set Key Value Store Length is : 502
+Training Set Key Value Store Created for Client 1o3r
+Training Set Key Value Store Length is : 500
+Training Set Key Value Store Created for Client ak2v
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client rjnv
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client gfyw
+Training Set Key Value Store Length is : 499
+Training Set Key Value Store Created for Client wqc4
+Training Set Key Value Store Length is : 498
+Validation Set Key Value Store Created for Client hbrp
+Validation Set Key Value Store Length is : 748
+Validation Set Key Value Store Created for Client oig9
+Validation Set Key Value Store Length is : 750
+Validation Set Key Value Store Created for Client f2cb
+Validation Set Key Value Store Length is : 751
+Validation Set Key Value Store Created for Client fno7
+Validation Set Key Value Store Length is : 751
+Validation Set Key Value Store Created for Client b0m9
+Validation Set Key Value Store Length is : 749
+Validation Set Key Value Store Created for Client 1o3r
+Validation Set Key Value Store Length is : 750
+Validation Set Key Value Store Created for Client ak2v
+Validation Set Key Value Store Length is : 749
+Validation Set Key Value Store Created for Client rjnv
+Validation Set Key Value Store Length is : 749
+Validation Set Key Value Store Created for Client gfyw
+Validation Set Key Value Store Length is : 749
+Validation Set Key Value Store Created for Client wqc4
+Validation Set Key Value Store Length is : 748
+ 
+
+ Personalisation Phase Training 21.........................................................................................
+avg train f1 all clients:  1.2244551181793213
+avg train accuracy all clients:  0.9995995991983968
+validation f1:  tensor(1.2160)
+validation acc:  0.9047261230642274
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8818151368151368
+ 
+
+ Personalisation Phase Training 22.........................................................................................
+avg train f1 all clients:  1.2630109786987305
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3075)
+validation acc:  0.9039227420993836
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8891158405158406
+ 
+
+ Personalisation Phase Training 23.........................................................................................
+avg train f1 all clients:  1.268871784210205
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3347)
+validation acc:  0.9075227803426493
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8938136451136451
+ 
+
+ Personalisation Phase Training 24.........................................................................................
+avg train f1 all clients:  1.269708514213562
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3466)
+validation acc:  0.9119228966333959
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8944126455126454
+ 
+
+ Personalisation Phase Training 25.........................................................................................
+avg train f1 all clients:  1.2698235511779785
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3529)
+validation acc:  0.9151083991577116
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8972128463128464
+ 
+
+ Personalisation Phase Training 26.........................................................................................
+avg train f1 all clients:  1.2698389291763306
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3573)
+validation acc:  0.9175149281937159
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8988129474129474
+ 
+
+ Personalisation Phase Training 27.........................................................................................
+avg train f1 all clients:  1.2698408365249634
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3606)
+validation acc:  0.9191214575419103
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9004125488125488
+ 
+
+ Personalisation Phase Training 28.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3613)
+validation acc:  0.9191117412549099
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.899712448112448
+ 
+
+ Personalisation Phase Training 29.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3610)
+validation acc:  0.918319786493311
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9002119484119484
+ 
+
+ Personalisation Phase Training 30.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3582)
+validation acc:  0.916314928505906
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.8997116475116476
+ 
+
+ Personalisation Phase Training 31.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3601)
+validation acc:  0.918718193180003
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.901712049112049
+ 
+
+ Personalisation Phase Training 32.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3614)
+validation acc:  0.919516599554505
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9024120493120492
+ 
+
+ Personalisation Phase Training 33.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3628)
+validation acc:  0.9199230122997626
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9025120491120491
+ 
+
+ Personalisation Phase Training 34.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3606)
+validation acc:  0.9175117415670998
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.903211649111649
+ 
+
+ Personalisation Phase Training 35.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3618)
+validation acc:  0.9199149673735514
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9029121494121494
+ 
+
+ Personalisation Phase Training 36.........................................................................................

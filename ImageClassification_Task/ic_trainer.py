@@ -118,15 +118,15 @@ class ICTrainer:
             # Collect data for plotting
             for class_label, freq in train_class_counts.items():
                 data.append({'client': c_id, 'class': class_label, 'frequency': freq, 'dataset': 'train'})
-            for class_label, freq in test_class_counts.items():
-                data.append({'client': c_id, 'class': class_label, 'frequency': freq, 'dataset': 'test'})
-            for class_label, freq in main_test_class_counts.items():
-                data.append({'client': c_id, 'class': class_label, 'frequency': freq, 'dataset': 'main_test'})
+            #for class_label, freq in test_class_counts.items():
+            #    data.append({'client': c_id, 'class': class_label, 'frequency': freq, 'dataset': 'test'})
+            #for class_label, freq in main_test_class_counts.items():
+            #    data.append({'client': c_id, 'class': class_label, 'frequency': freq, 'dataset': 'main_test'})
             
             print(f"Client {c_id} class distribution:")
             print(f"  Train: {train_class_counts}")
-            print(f"  Test: {test_class_counts}")
-            print(f"  Main Test: {main_test_class_counts}")
+            #print(f"  Test: {test_class_counts}")
+            #print(f"  Main Test: {main_test_class_counts}")
         print(f'generated {self.num_clients} clients with data')
         
         # Convert data to DataFrame
@@ -717,11 +717,11 @@ class ICTrainer:
             self.early_stop_counter += 1
             return False
                     
-    def save_models(self,):
+    def save_models(self,epoch):
         """
         save client-side back and server-side center_back models to disk
         """
-        print("Save Model")
+        print("Save Model at epoch", epoch)
         if self.personalization_mode ==False:
             print("Save Best Model for Generalisation Phase")
             for c_id in self.client_ids:
@@ -898,19 +898,6 @@ class ICTrainer:
                 print(f"Early stopping at epoch {epoch}")
                 break
 
-            # if key value store refresh rate != 0, it is enabled
-            #if self.args.kv_refresh_rate != 0:
-            #    if epoch % self.kv_refresh_rate == 0:
-            #        print(f'\npreparing key value store for the next {self.kv_refresh_rate} epochs\n\n')
-            #        self.populate_key_value_store()
-            #        self.clear_cache()
-
-            #if self.args.personalize:
-            #    if epoch == self.args.p_epoch:
-            #        self.personalization_mode = True
-            #        self.load_best_models()
-            #        self.personalize(epoch)
-
             wandb.log({'epoch':epoch})
 
             for c_id in self.client_ids:
@@ -924,13 +911,12 @@ class ICTrainer:
                 self.clients[c_id].back_model.eval()
                 self.sc_clients[c_id].center_back_model.eval()
                 
-            #self.test_one_epoch(epoch)
             should_save = self.test_one_epoch(epoch)
             print(should_save)
             if should_save:
                 self.early_stop = False
                 print("Model improved and saved.")
-                #self.save_models()
+                self.save_models(epoch)
                 self.inference()
                 #self.save_kv() # for personalisation phase
             else:
@@ -944,19 +930,20 @@ class ICTrainer:
         #print(f'\n\n\n{"::"*10}BEST METRICS{"::"*10}')
         #print("Training Mean f1 Score: ", self.overall_f1['train'][self.max_f1['epoch']])
         #print("Maximum Test Mean f1 Score: ", self.max_f1['f1'])
-        
+        self.inference()
         if self.personalize:
             self.personalization_mode = True
+            self.personalize(epoch)
             print("Personalization Started")
             self.save_kv()
             for epoch in tqdm(range(epoch,self.args.epochs)):
-                #for c_id in self.client_ids:
-                #    self.clients[c_id].back_model.train()
+                for c_id in self.client_ids:
+                    self.clients[c_id].back_model.train()
+                    self.sc_clients[c_id].center_back_model.eval()
                 self.train_one_epoch_personalise(epoch)
                 self.clear_cache()
-                #for c_id in self.client_ids:
-                #    self.clients[c_id].back_model.eval()
-                #    self.sc_clients[c_id].center_back_model.eval()
+                for c_id in self.client_ids:
+                    self.clients[c_id].back_model.eval()
                 self.test_one_epoch_personalise(epoch)
                 self.clear_cache()
                 #self.save_models()

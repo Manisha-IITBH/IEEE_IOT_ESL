@@ -14,7 +14,7 @@
  'pretrained': True,
  'seed': 42,
  'server_lr': 0.001,
- 'split': 1,
+ 'split': 2,
  'test_batch_size': 256,
  'use_key_value_store': True,
  'wandb': True,
@@ -314,18 +314,22 @@ center_back(
       (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
     )
   )
-  (l4): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
+  (l4_0): BasicBlock(
+    (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (downsample): Sequential(
+      (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
     )
+  )
+)
+
+Back Model:
+back(
+  (l4_1): Sequential(
     (1): BasicBlock(
       (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
       (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
@@ -335,16 +339,12 @@ center_back(
     )
   )
   (l5): AdaptiveAvgPool2d(output_size=(1, 1))
-)
-
-Back Model:
-back(
   (fl): Flatten(start_dim=1, end_dim=-1)
   (fc): Linear(in_features=512, out_features=10, bias=True)
 )
 Initialized client-side model splits front & back and their optimizers
 Initialized server-side model splits center_front, center_back, and center_back optimizer
-Directory created at saved_models/CIFAR10/key_value_mode/model_split1
+Directory created at saved_models/CIFAR10/key_value_mode/model_split2
 generating training samples in key-value store...
 Training Set Key Value Store Created for Client hbrp
 Training Set Key Value Store Length is : 500
@@ -396,219 +396,216 @@ commence training...
 
 Generalisation Phase Training 0..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.6587469577789307
-avg train accuracy all clients:  0.6569243436780976
+avg train f1 all clients:  0.6420273184776306
+avg train accuracy all clients:  0.6391266138172986
 Merging model weights at epoch 0
 Created list to store f1 score for test data.
-validation f1:  tensor(0.5793)
-validation acc:  0.5794428262852207
+validation f1:  tensor(0.6454)
+validation acc:  0.6450882158114529
 0
-MAX Validation Accuracy Score: 0.5794428262852207 @ epoch 0
+MAX Validation Accuracy Score: 0.6450882158114529 @ epoch 0
 True
 Model improved and saved.
 Save Model at epoch 0
 Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.5814613838613838
 
 
 Generalisation Phase Training 1..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.7985417246818542
-avg train accuracy all clients:  0.7969516442788663
+avg train f1 all clients:  0.8421958088874817
+avg train accuracy all clients:  0.8415766463065852
 Merging model weights at epoch 1
 Created list to store f1 score for test data.
-validation f1:  tensor(0.6888)
-validation acc:  0.6886132898126369
-0.5794428262852207
-MAX Validation Accuracy Score: 0.6886132898126369 @ epoch 1
+validation f1:  tensor(0.8422)
+validation acc:  0.8423010864173828
+0.6450882158114529
+MAX Validation Accuracy Score: 0.8423010864173828 @ epoch 1
 True
 Model improved and saved.
 Save Model at epoch 1
 Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.7006913537913538
 
 
 Generalisation Phase Training 2..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.8887548446655273
-avg train accuracy all clients:  0.8877723848823107
+avg train f1 all clients:  0.9391952753067017
+avg train accuracy all clients:  0.9385933836651009
 Merging model weights at epoch 2
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8640)
-validation acc:  0.8639044272708363
-0.6886132898126369
-MAX Validation Accuracy Score: 0.8639044272708363 @ epoch 2
+validation f1:  tensor(0.8762)
+validation acc:  0.8759045680730893
+0.8423010864173828
+MAX Validation Accuracy Score: 0.8759045680730893 @ epoch 2
 True
 Model improved and saved.
 Save Model at epoch 2
 Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.8637577353577355
 
 
 Generalisation Phase Training 3..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9470453262329102
-avg train accuracy all clients:  0.9461846140011065
+avg train f1 all clients:  0.9728218913078308
+avg train accuracy all clients:  0.972602323112907
 Merging model weights at epoch 3
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8849)
-validation acc:  0.8847206067297076
-0.8639044272708363
-MAX Validation Accuracy Score: 0.8847206067297076 @ epoch 3
+validation f1:  tensor(0.8924)
+validation acc:  0.892338315813053
+0.8759045680730893
+MAX Validation Accuracy Score: 0.892338315813053 @ epoch 3
 True
 Model improved and saved.
 Save Model at epoch 3
 Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.8944677515677515
 
 
 Generalisation Phase Training 4..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9687655568122864
-avg train accuracy all clients:  0.9683870813459159
+avg train f1 all clients:  0.9850705862045288
+avg train accuracy all clients:  0.9848011559371539
 Merging model weights at epoch 4
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8885)
-validation acc:  0.8883270708331332
-0.8847206067297076
-MAX Validation Accuracy Score: 0.8883270708331332 @ epoch 4
+validation f1:  tensor(0.8966)
+validation acc:  0.8967303348853581
+0.892338315813053
+MAX Validation Accuracy Score: 0.8967303348853581 @ epoch 4
 True
 Model improved and saved.
 Save Model at epoch 4
 Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.8912685465685465
 
 
 Generalisation Phase Training 5..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.985556960105896
-avg train accuracy all clients:  0.9853963575275987
+avg train f1 all clients:  0.9889364242553711
+avg train accuracy all clients:  0.9888047663901498
 Merging model weights at epoch 5
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8822)
-validation acc:  0.8826950063201012
+validation f1:  tensor(0.8923)
+validation acc:  0.8927206963311413
 False
 
 
 Generalisation Phase Training 6..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9870098233222961
-avg train accuracy all clients:  0.9867975695420854
+avg train f1 all clients:  0.9941104054450989
+avg train accuracy all clients:  0.9941991855871037
 Merging model weights at epoch 6
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8945)
-validation acc:  0.8942902382438118
-0.8883270708331332
-MAX Validation Accuracy Score: 0.8942902382438118 @ epoch 6
-True
-Model improved and saved.
-Save Model at epoch 6
-Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.8951683497683499
+validation f1:  tensor(0.8943)
+validation acc:  0.8939158898542378
+False
 
 
 Generalisation Phase Training 7..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9914719462394714
-avg train accuracy all clients:  0.9915963799662428
+avg train f1 all clients:  0.997851550579071
+avg train accuracy all clients:  0.9977975919807293
 Merging model weights at epoch 7
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8902)
-validation acc:  0.889512613001808
-False
+validation f1:  tensor(0.9030)
+validation acc:  0.9027159538552617
+0.8967303348853581
+MAX Validation Accuracy Score: 0.9027159538552617 @ epoch 7
+True
+Model improved and saved.
+Save Model at epoch 7
+Save Best Model for Generalisation Phase
 
 
 Generalisation Phase Training 8..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9933246374130249
-avg train accuracy all clients:  0.9934003879919133
+avg train f1 all clients:  0.9983876943588257
+avg train accuracy all clients:  0.9983979927823325
 Merging model weights at epoch 8
 Created list to store f1 score for test data.
-validation f1:  tensor(0.9008)
-validation acc:  0.900727160434567
-0.8942902382438118
-MAX Validation Accuracy Score: 0.900727160434567 @ epoch 8
-True
-Model improved and saved.
-Save Model at epoch 8
-Save Best Model for Generalisation Phase
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.9059735561735561
+validation f1:  tensor(0.8998)
+validation acc:  0.8995094769516312
+False
 
 
 Generalisation Phase Training 9..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9967802166938782
-avg train accuracy all clients:  0.9967991951967807
+avg train f1 all clients:  0.9975565075874329
+avg train accuracy all clients:  0.9975955847437848
 Merging model weights at epoch 9
 Created list to store f1 score for test data.
-validation f1:  tensor(0.9008)
-validation acc:  0.9003223539576632
+validation f1:  tensor(0.8947)
+validation acc:  0.894722315557049
 False
 
 
 Generalisation Phase Training 10..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9979115724563599
-avg train accuracy all clients:  0.997999594388739
+avg train f1 all clients:  0.99907386302948
+avg train accuracy all clients:  0.9991983935742972
 Merging model weights at epoch 10
 Created list to store f1 score for test data.
-validation f1:  tensor(0.9002)
-validation acc:  0.8999127410038559
-False
+validation f1:  tensor(0.9074)
+validation acc:  0.9071159410550568
+0.9027159538552617
+MAX Validation Accuracy Score: 0.9071159410550568 @ epoch 10
+True
+Model improved and saved.
+Save Model at epoch 10
+Save Best Model for Generalisation Phase
 
 
 Generalisation Phase Training 11..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9960126876831055
-avg train accuracy all clients:  0.9960019880079519
+avg train f1 all clients:  0.9996093511581421
+avg train accuracy all clients:  0.9995983935742971
 Merging model weights at epoch 11
 Created list to store f1 score for test data.
-validation f1:  tensor(0.9000)
-validation acc:  0.9003063281012496
+validation f1:  tensor(0.9011)
+validation acc:  0.9015015088241413
 False
 
 
 Generalisation Phase Training 12..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9987875819206238
-avg train accuracy all clients:  0.9987979879630361
+avg train f1 all clients:  1.0
+avg train accuracy all clients:  1.0
 Merging model weights at epoch 12
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8968)
-validation acc:  0.8963062769004303
+validation f1:  tensor(0.9008)
+validation acc:  0.9007127154034464
 False
 
 
 Generalisation Phase Training 13..........................................................................................
 Created list to store f1 score for train data.
-avg train f1 all clients:  0.9985877871513367
-avg train accuracy all clients:  0.9985983935839359
+avg train f1 all clients:  1.0
+avg train accuracy all clients:  1.0
 Merging model weights at epoch 13
 Created list to store f1 score for test data.
-validation f1:  tensor(0.8998)
-validation acc:  0.8999143090289443
+validation f1:  tensor(0.8997)
+validation acc:  0.8995126770028319
 False
-Early stopping at epoch 14
-Loaded Best Model
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
-Load Best Model for Generalisation Phase
+
+
+Generalisation Phase Training 14..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  1.0
+avg train accuracy all clients:  1.0
+Merging model weights at epoch 14
+Created list to store f1 score for test data.
+validation f1:  tensor(0.9029)
+validation acc:  0.9035159282548519
+False
+
+
+Generalisation Phase Training 15..........................................................................................
+Created list to store f1 score for train data.
+avg train f1 all clients:  1.0
+avg train accuracy all clients:  1.0
+Merging model weights at epoch 15
+Created list to store f1 score for test data.
+validation f1:  tensor(0.9026)
+validation acc:  0.9023159154546472
+False
+Early stopping at epoch 16
 RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.7670374911374911
+Average inference score: 0.908171960971961
 Personalization Started
 Training Set Key Value Store Created for Client hbrp
 Training Set Key Value Store Length is : 500
@@ -652,22 +649,144 @@ Validation Set Key Value Store Created for Client wqc4
 Validation Set Key Value Store Length is : 750
  
 
- Personalisation Phase Training 14.........................................................................................
-avg train f1 all clients:  1.2139052152633667
-avg train accuracy all clients:  0.9891939670987601
-validation f1:  tensor(1.1476)
-validation acc:  0.8322336165378645
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.7704371922371923
- 
-
- Personalisation Phase Training 15.........................................................................................
-avg train f1 all clients:  1.2498290538787842
-avg train accuracy all clients:  0.9891939670987601
-validation f1:  tensor(1.2115)
-validation acc:  0.8322336165378645
-RUNNING INFERENCE from the best models on test dataset
-Average inference score: 0.7693398931398931
- 
-
  Personalisation Phase Training 16.........................................................................................
+avg train f1 all clients:  1.225000023841858
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.2297)
+validation acc:  0.913922443559097
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9172757627757628
+ 
+
+ Personalisation Phase Training 17.........................................................................................
+avg train f1 all clients:  1.2631250619888306
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3267)
+validation acc:  0.9187209267348277
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9199763625763625
+ 
+
+ Personalisation Phase Training 18.........................................................................................
+avg train f1 all clients:  1.268890619277954
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3526)
+validation acc:  0.9191241267860285
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9218762634762634
+ 
+
+ Personalisation Phase Training 19.........................................................................................
+avg train f1 all clients:  1.2697112560272217
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3604)
+validation acc:  0.9203225075601209
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.922676063076063
+ 
+
+ Personalisation Phase Training 20.........................................................................................
+avg train f1 all clients:  1.2698239088058472
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3622)
+validation acc:  0.919922507560121
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9208753625753626
+ 
+
+ Personalisation Phase Training 21.........................................................................................
+avg train f1 all clients:  1.2698390483856201
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3622)
+validation acc:  0.9195176882830125
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9213755627755628
+ 
+
+ Personalisation Phase Training 22.........................................................................................
+avg train f1 all clients:  1.2698408365249634
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3602)
+validation acc:  0.917514462631402
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9221757631757631
+ 
+
+ Personalisation Phase Training 23.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3589)
+validation acc:  0.9171144626314021
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9217759631759632
+ 
+
+ Personalisation Phase Training 24.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3597)
+validation acc:  0.9183208755340087
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9215759631759634
+ 
+
+ Personalisation Phase Training 25.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3610)
+validation acc:  0.9191192819085104
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9213758630758632
+ 
+
+ Personalisation Phase Training 26.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3609)
+validation acc:  0.9187192819085105
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9216760632760632
+ 
+
+ Personalisation Phase Training 27.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3609)
+validation acc:  0.9187192819085105
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9214759631759633
+ 
+
+ Personalisation Phase Training 28.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3610)
+validation acc:  0.9187192819085105
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9215759631759631
+ 
+
+ Personalisation Phase Training 29.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3608)
+validation acc:  0.9187192819085105
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9215759631759631
+ 
+
+ Personalisation Phase Training 30.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3608)
+validation acc:  0.9187192819085105
+RUNNING INFERENCE from the best models on test dataset
+Average inference score: 0.9217758632758632
+ 
+
+ Personalisation Phase Training 31.........................................................................................
+avg train f1 all clients:  1.269840955734253
+avg train accuracy all clients:  1.0
+validation f1:  tensor(1.3609)
+validation acc:  0.9187192819085105
+RUNNING INFERENCE from the best models on test dataset
