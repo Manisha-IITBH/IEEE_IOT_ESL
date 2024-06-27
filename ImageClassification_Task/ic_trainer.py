@@ -305,11 +305,11 @@ class ICTrainer:
             # Distribute the merged weights to all server-side center_back models
             for c_id, sc_client in self.sc_clients.items():
                 sc_client.center_back_model.load_state_dict(w_glob)
-                print(f"Merged weights loaded to server copy client {c_id}")
+                #print(f"Merged weights loaded to server copy client {c_id}")
         except Exception as e:
             print(f"Error merging or distributing server-side weights: {e}")
 
-        if not self.personalization_mode:
+        if True:
             params = []
             sample_lens = []
 
@@ -329,7 +329,7 @@ class ICTrainer:
                 # Distribute the merged weights to all client-side back models
                 for c_id, client in self.clients.items():
                     client.back_model.load_state_dict(w_glob_cb)
-                    print(f"Merged weights loaded to client {c_id}")
+                    #print(f"Merged weights loaded to client {c_id}")
             except Exception as e:
                 print(f"Error merging or distributing client-side weights: {e}")
 
@@ -434,7 +434,7 @@ class ICTrainer:
             - merge model weights across clients (center_back & back)
         """
 
-        print(f"Generalisation Phase Training {epoch}..........................................................................................\n\n")
+        print(f"\n\nGeneralisation Phase Training {epoch}..........................................................................................")
         num_iters = self.create_iters(dl='train')
         self.overall_f1['train'].append(0)
         self.overall_acc['train'].append(0)
@@ -471,7 +471,7 @@ class ICTrainer:
                     f1=client.calculate_train_metric()
                     client.train_f1[-1] += f1 
                     
-                    print("train f1 per iteration: ",iteration,f1)
+                    #print("train f1 per iteration: ",iteration,f1)
                     wandb.log({f'train f1 / iter: client {client_id}':f1.item()})
 
         # calculate per epoch metrics
@@ -503,11 +503,11 @@ class ICTrainer:
         wandb.log({'avg train bal acc all clients': bal_acc})
         wandb.log({'avg train f1 macro all clients': f1_macro})
         wandb.log({'avg train loss all clients': avg_loss / self.num_clients})
-
-        if not self.pooling_mode:
+        self.merge_model_weights(epoch)
+        #if not self.pooling_mode:
             # merge model weights (center and back)
             #print()
-            self.merge_model_weights(epoch)
+            #self.merge_model_weights(epoch)
             
     
     def train_one_epoch_personalise(self,epoch):
@@ -525,7 +525,7 @@ class ICTrainer:
             - calculate epoch metric avg. for all clients
             - merge model weights across clients (center_back & back)
         """
-        print(f"Personalisation Phase Training {epoch}..........................................................................................\n\n")                
+        print(f" \n\n Personalisation Phase Training {epoch}.........................................................................................")                
         for client_id, client in tqdm(self.clients.items()):
                 client.iterator = iter(client.train_DataLoader)
                 client.num_iterations = len(client.train_DataLoader)
@@ -533,12 +533,14 @@ class ICTrainer:
                 for iteration in tqdm(range(client.num_iterations),desc="Personlaisation Phase Training"):
                     client.forward_back_personalise()
                     client.calculate_loss(mode='train')
+                    client.loss.backward()
                     wandb.log({'train step loss': client.loss.item()})
                     client.step_back()
                     client.zero_grad_back()
+                    #client.loss.backward()
                     f1=client.calculate_train_metric()
                     client.train_f1[-1] += f1
-                    print("train f1 per iteration: ",iteration,f1)
+                    #print("train f1 per iteration: ",iteration,f1)
                     wandb.log({f'train f1 / iter: client {client_id}':f1.item()})
 
         # calculate per epoch metrics
@@ -599,7 +601,7 @@ class ICTrainer:
                     wandb.log({'Validation step loss': client.loss.item()})
                     f1=client.calculate_test_metric()
                     client.test_f1[-1] += f1 
-                    print("validation f1 per iteration: ",iteration,f1)
+                    #print("validation f1 per iteration: ",iteration,f1)
                     wandb.log({f'Validation f1 / iter: client {client_id}':f1.item()})
                     
         # calculate per epoch metrics
@@ -668,7 +670,7 @@ class ICTrainer:
                     wandb.log({'Validation step loss': client.loss.item()})
                     f1=client.calculate_test_metric()
                     client.test_f1[-1] += f1 
-                    print("validation f1 per iteration: ",iteration,f1)
+                    #print("validation f1 per iteration: ",iteration,f1)
                     wandb.log({f'Validation f1 / iter: client {client_id}':f1.item()})
                     
         # calculate per epoch metrics
@@ -701,6 +703,7 @@ class ICTrainer:
         wandb.log({'Validation avg f1 macro all clients': bal_acc})
         wandb.log({'Validation avg loss all clients': avg_loss / self.num_clients}) 
         if self.overall_acc['test'][-1] > self.best_acc:
+            print(self.best_acc)
             self.best_acc = self.overall_acc['test'][-1]
             self.best_epoch = epoch
             self.early_stop_counter = 0
@@ -784,7 +787,7 @@ class ICTrainer:
 
         print("RUNNING INFERENCE from the best models on test dataset")
 
-        self.load_best_models()
+        #self.load_best_models()
         avg_acc=0
         for c_id in tqdm(self.client_ids,desc="Testing"):
 
@@ -819,7 +822,7 @@ class ICTrainer:
                 )
             })
 
-            print(f'inference score {c_id}: {accuracy}')
+            #print(f'inference score {c_id}: {accuracy}')
             avg_acc+=accuracy
             wandb.log({f'inference score {c_id}': accuracy})
         print(f'Average inference score: {avg_acc/10}')
@@ -923,10 +926,12 @@ class ICTrainer:
                 
             #self.test_one_epoch(epoch)
             should_save = self.test_one_epoch(epoch)
+            print(should_save)
             if should_save:
                 self.early_stop = False
                 print("Model improved and saved.")
-                self.save_models()
+                #self.save_models()
+                self.inference()
                 #self.save_kv() # for personalisation phase
             else:
                 if self.early_stop_counter == 5:
@@ -934,26 +939,27 @@ class ICTrainer:
 
             self.clear_cache()
         #self.load_best_models
-        self.inference()
+        #self.inference()
         # final metrics
-        print(f'\n\n\n{"::"*10}BEST METRICS{"::"*10}')
-        print("Training Mean f1 Score: ", self.overall_f1['train'][self.max_f1['epoch']])
-        print("Maximum Test Mean f1 Score: ", self.max_f1['f1'])
+        #print(f'\n\n\n{"::"*10}BEST METRICS{"::"*10}')
+        #print("Training Mean f1 Score: ", self.overall_f1['train'][self.max_f1['epoch']])
+        #print("Maximum Test Mean f1 Score: ", self.max_f1['f1'])
         
         if self.personalize:
             self.personalization_mode = True
             print("Personalization Started")
             self.save_kv()
             for epoch in tqdm(range(epoch,self.args.epochs)):
-                for c_id in self.client_ids:
-                    self.clients[c_id].back_model.train()
+                #for c_id in self.client_ids:
+                #    self.clients[c_id].back_model.train()
                 self.train_one_epoch_personalise(epoch)
                 self.clear_cache()
-                for c_id in self.client_ids:
-                    self.clients[c_id].back_model.eval()
-                    self.sc_clients[c_id].center_back_model.eval()
+                #for c_id in self.client_ids:
+                #    self.clients[c_id].back_model.eval()
+                #    self.sc_clients[c_id].center_back_model.eval()
                 self.test_one_epoch_personalise(epoch)
-                self.save_models()
+                self.clear_cache()
+                #self.save_models()
                 self.inference()
                 
     def __init__(self,args):
