@@ -21,10 +21,11 @@ git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recurs
 
 - update `WANDB_KEY` in config.py
 
-### RUN:
+### Environment:
 
 - activate venv: `source ./.venv/bin/activate`
 
+### RUN:
 KiTS-19 EXAMPLE:
 
 ```
@@ -39,6 +40,8 @@ python trainer.py -c 10 -bs 64 -tbs 256 -n 80 --client_lr 1e-3 --server_lr 1e-3 
 python trainer.py -c 10 -bs 64 -tbs 256 -n 80 --client_lr 1e-3 --server_lr 1e-3 --dataset CIFAR10 --seed 42 --model resnet18 --split 1 -kv --kv_refresh_rate 0 --kv_factor 1 --wandb > text.txt
 ```
 
+
+### Options:
 ```
 options:
   -h, --help            show this help message and exit
@@ -77,9 +80,9 @@ options:
 
 ---
 
-## Datasets
+## Datasets Used:
 
 - KiTS19
-- IXI Tiny
-- ISIC2019
-- CIAFR10
+- IXI-Tiny
+- ISICI-2019
+- CIFAR10
