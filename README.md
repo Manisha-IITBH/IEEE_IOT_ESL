@@ -28,18 +28,13 @@ Deep learning (DL) models require significant memory, computational resources, a
 4. Extensive Evaluation: Demonstrated improvements over baseline FL techniques on real-world federated benchmarks for image classification and 3D segmentation.
 
 ## Experimental Results
-    1. Computation Reduction: 1623x reduction for image classification and 23.9x for 3D segmentation on resource-constrained devices.
-    2. Communication Traffic Reduction: 3.92x reduction for image classification and 1.3x for 3D segmentation during training.
-    3. Accuracy Improvement: Improved average accuracy by 35% for image classification and 31% for 3D segmentation compared to baseline FL techniques.
+1. Computation Reduction: 1623x reduction for image classification and 23.9x for 3D segmentation on resource-constrained devices.
+2. Communication Traffic Reduction: 3.92x reduction for image classification and 1.3x for 3D segmentation during training.
+3. Accuracy Improvement: Improved average accuracy by 35% for image classification and 31% for 3D segmentation compared to baseline FL techniques.
 
 ## Dataset Used
-We have used multiple datasets from different with diffrent complexities. The details about them are as follows
-1. **CIFAR-10:** 
-2. **ISIC-2019:** 
-3. **KITS19:**
-4. **IXI-Tiny:**
+We have used multiple datasets from different with diffrent complexities. The details about them are as follows:
    
-
 | **Data Set**      | **No. of Classes** | **Metric Used** | **Task** | **Base Model** | **Pretrained on Dataset** |
 |:--------------------------:|:------------------:|:------------------:|:---------------------:|:-------------------:|:------------------------------:|
 | **CIFAR-10**        | 10            | Accuracy            | Image Classification                   | MobileNetV3                  | ImageNet                      | 
@@ -48,23 +43,22 @@ We have used multiple datasets from different with diffrent complexities. The de
 | **IXI-Tiny** | 2         | Dice Score       | 3D-Image Segmentation                  | 3D UNet               | MSD Spleen                     | 
 
 ## Installation
-    1. Clone the repository and navigate to the project directory:
+1. Clone the repository and navigate to the project directory:
                         ```bash
                         git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
                         ```
-    2. Install the required dependencies:
+2. Install the required dependencies:
                 ```bash
                 pip install -r requirements.txt
                 ```
-    3. update `WANDB_KEY` in config.py
+3. update `WANDB_KEY` in config.py
 
     
 ## Setup Environment
-    Activate the Environment using below command.
+Activate the Environment using below command.
             - activate venv: `source ./.venv/bin/activate`
 
 ## Usage:
-
 We use a master trainer script that invokes a specific trainer for each dataset. Run the main script to start the training process:
 
 CIFAR10 EXAMPLE:
