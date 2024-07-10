@@ -133,7 +133,7 @@ year = {2023}
 ```
 
 ## Citing ESL
-If you use ESL project in your research, please consider citing:
+If you have found the code and/or its ideas useful, please consider citing:
 
 ```bibtex
 @ARTICLE{10587192,
