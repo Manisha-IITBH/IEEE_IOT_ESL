@@ -42,7 +42,7 @@ We have used multiple datasets from different with diffrent complexities. The de
 | **Data Set**      | **No. of Classes** | **Metric Used** | **Task** | **Base Model** | **Pretrained on Dataset** |
 |:--------------------------:|:------------------:|:------------------:|:---------------------:|:-------------------:|:------------------------------:|
 | **CIFAR-10**        | 10            | Accuracy            | Image Classification                   | MobileNetV3                  | ImageNet                      | 
-| **ISIC-2019**          | 8            | Balanced Accuracy        | Medical Image Classification                   | ResNet-18                 | ImageNet                       | 
+| **ISIC-2019**      | 8            | Balanced Accuracy        | Medical Image Classification | ResNet-18      | ImageNet         | 
 | **KITS19**        | 3            | Dice Score     | 3D-Image Segmentation                  | nnUNet                  | MSD Pancreas                       |  
 | **IXI-Tiny** | 2         | Dice Score       | 3D-Image Segmentation                  | 3D UNet               | MSD Spleen                     | 
 
