@@ -26,12 +26,13 @@ year = {2023}
 
 ## Dataset Used
 
-We have used five datasets from different domains. The details about them are as follows
+We have used multiple datasets from different with diffrent complexities. The details about them are as follows
 
 1. **CIFAR-10:** 
 2. **ISIC-2019:** 
 3. **KITS19:**
-4. **IXI-Tiny:** 
+4. **IXI-Tiny:**
+   
 
 | **Data Set**      | **No. of Classes** | **Metric Used** | **Task** | **Base Model** | **Pretrained on Dataset** |
 |:--------------------------:|:------------------:|:------------------:|:---------------------:|:-------------------:|:------------------------------:|
@@ -44,17 +45,17 @@ We have used five datasets from different domains. The details about them are as
 
 ## Setup Environment
 
-### Usage:
-
-```bash
-git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
-```
-
-- update `WANDB_KEY` in config.py
+### Usage: 
+      1. clone this repository.
+                ```bash
+                git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
+                ```
+      2. update `WANDB_KEY` in config.py
 
 ### Environment:
-
-- activate venv: `source ./.venv/bin/activate`
+      1. All dependencies are available in requiements.txt file.
+      2. Activate the Environment using below command.
+            - activate venv: `source ./.venv/bin/activate`
 
 
 ## Run the trainer Files:
