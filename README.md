@@ -10,7 +10,7 @@ Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel app
 - [Dataset Used](#dataset-used)
 - [installation](#installation)
 - [Setup Environment](#setup-environment)
-- [Usage](#usgae)
+- [Usage](#usage)
 - [Citing ESL](#cite-esl)
 
 ## Abstract
