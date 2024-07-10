@@ -119,9 +119,7 @@ options:
 
 ---
 
-## Acknowlegment
-## Acknowledgments
-
+## Acknowledgment
 This project makes use of the [PFSL](https://paperswithcode.com/paper/pfsl-personalized-fair-split-learning-with) framework. If you use this project in your research, please consider citing:
 
 ```bibtex
@@ -137,6 +135,7 @@ year = {2023}
 
 ## Citing ESL
 If you use ESL project in your research, please consider citing:
+
 ```bibtex
 @ARTICLE{10587192,
   author={Chawla, Manisha and Gupta, Gagan Raj and Gaddam, Shreyas and Wadhwa, Manas},
