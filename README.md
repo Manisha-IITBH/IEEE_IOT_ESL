@@ -48,11 +48,12 @@ We have used multiple datasets from different with diffrent complexities. The de
 
 ## Installation
 1. Clone the repository and navigate to the project directory:
-                        ```
-                        git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
+
+   ```
+   git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
    
-                        cd Efficient-Split-Learning
-                        ```
+   cd Efficient-Split-Learning
+   ```
 
 3. Install the required dependencies:
                 ```
