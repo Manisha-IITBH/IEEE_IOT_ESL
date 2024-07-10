@@ -59,8 +59,7 @@ We have used multiple datasets from different with diffrent complexities. The de
 
     
 ## Setup Environment
-Activate the Environment using below command.
-            - activate venv: `source ./.venv/bin/activate`
+Activate the Environment using following command:  `source ./.venv/bin/activate`
 
 ## Usage
 We use a master trainer script that invokes a specific trainer for each dataset. Run the main script to start the training process:
