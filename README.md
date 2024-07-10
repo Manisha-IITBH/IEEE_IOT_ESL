@@ -50,14 +50,15 @@ We have used multiple datasets from different with diffrent complexities. The de
 1. Clone the repository and navigate to the project directory:
                         ```
                         git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
+                        cd Efficient-Split-Learning
                         ```
 
-2. Install the required dependencies:
+3. Install the required dependencies:
                 ```
                 pip install -r requirements.txt
                 ```
 
-3. update `WANDB_KEY` in config.py
+4. update `WANDB_KEY` in config.py
 
     
 ## Setup Environment
