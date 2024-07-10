@@ -80,7 +80,7 @@ python trainer.py -c 6 -bs 4 -tbs 2 -n 30 --client_lr 6e-4 --server_lr 6e-4 --da
 ```
 
 
-### Options:
+###### Options:
 ```
 options:
   -h, --help            show this help message and exit
