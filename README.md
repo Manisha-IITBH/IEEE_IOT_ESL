@@ -11,6 +11,7 @@ Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel app
 - [installation](#install)
 - [Setup Environment](#setup-environment)
 - [Usage](#usgae)
+- [Citing ESL](#cite)
 
 ## Abstract
 Distributed training of deep learning models on resource-constrained devices has gained significant interest. Federated Learning (FL) and Split Learning (SL) are two prominent techniques for collaborative training. ESL optimizes these techniques by reducing device computation during parallel model training and minimizing high communication costs due to frequent exchanges of models, data, and gradients. ESL introduces a key-value store for caching intermediate activations and customizing state-of-the-art neural networks for split learning. This approach allows clients to learn personalized models tailored to their specific data distributions.
@@ -60,7 +61,7 @@ We have used multiple datasets from different with diffrent complexities. The de
 Activate the Environment using below command.
             - activate venv: `source ./.venv/bin/activate`
 
-## Usage:
+## Usage
 We use a master trainer script that invokes a specific trainer for each dataset. Run the main script to start the training process:
 
 CIFAR10 EXAMPLE:
@@ -128,4 +129,18 @@ url = {https://github.com/mnswdhw/PFSL},
 version = {1.0.0},
 year = {2023} 
 }
+```
+
+## Citing FLamby
+```bibtex
+@ARTICLE{10587192,
+  author={Chawla, Manisha and Gupta, Gagan Raj and Gaddam, Shreyas and Wadhwa, Manas},
+  journal={IEEE Internet of Things Journal}, 
+  title={Beyond Federated Learning for IoT: Efficient Split Learning With Caching & Model Customization}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-1},
+  keywords={Computational modeling;Training;Servers;Internet of Things;Data models;Quantization (signal);Convergence;Communication Reduction;Federated Learning;IoT;Key-Value Store;Personalization;Resource-Constrained Devices;Split Learning},
+  doi={10.1109/JIOT.2024.3424660}}
 ```
