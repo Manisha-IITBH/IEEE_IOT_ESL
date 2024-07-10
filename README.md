@@ -58,9 +58,9 @@ We have used multiple datasets from different with diffrent complexities. The de
             - activate venv: `source ./.venv/bin/activate`
 
 
-## Run the trainer Files:
+## Training:
 
-We have dedicated a trainer file which call specific trainer file for each dataset. 
+We use a master trainer script that invokes a specific trainer for each dataset.
 
 CIFAR10 EXAMPLE:
 
