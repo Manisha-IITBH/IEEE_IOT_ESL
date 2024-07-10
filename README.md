@@ -8,8 +8,9 @@ Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel app
 - [Key Contributions](#contribution)
 - [Experimental Results](#results)
 - [Dataset Used](#dataset-used)
+- [installation](#install)
 - [Setup Environment](#setup-environment)
-- [Training](#training)
+- [Usage](#usgae)
 
 ## Abstract
 Distributed training of deep learning models on resource-constrained devices has gained significant interest. Federated Learning (FL) and Split Learning (SL) are two prominent techniques for collaborative training. ESL optimizes these techniques by reducing device computation during parallel model training and minimizing high communication costs due to frequent exchanges of models, data, and gradients. ESL introduces a key-value store for caching intermediate activations and customizing state-of-the-art neural networks for split learning. This approach allows clients to learn personalized models tailored to their specific data distributions.
@@ -43,26 +44,25 @@ We have used multiple datasets from different with diffrent complexities. The de
 | **KITS19**        | 3            | Dice Score     | 3D-Image Segmentation                  | nnUNet                  | MSD Pancreas                       |  
 | **IXI-Tiny** | 2         | Dice Score       | 3D-Image Segmentation                  | 3D UNet               | MSD Spleen                     | 
 
-
-
-## Setup Environment
-
-### Usage: 
-      1. clone this repository.
+## Installation
+    1. Clone the repository and navigate to the project directory:
+                        ```bash
+                        git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
+                        ```
+    2. Install the required dependencies:
                 ```bash
-                git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
+                pip install -r requirements.txt
                 ```
-      2. update `WANDB_KEY` in config.py
+    3. update `WANDB_KEY` in config.py
 
-### Environment:
-      1. All dependencies are available in requiements.txt file.
-      2. Activate the Environment using below command.
+    
+## Setup Environment
+    Activate the Environment using below command.
             - activate venv: `source ./.venv/bin/activate`
 
+## Usage:
 
-## Training:
-
-We use a master trainer script that invokes a specific trainer for each dataset.
+We use a master trainer script that invokes a specific trainer for each dataset. Run the main script to start the training process:
 
 CIFAR10 EXAMPLE:
 
