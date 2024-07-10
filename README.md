@@ -55,12 +55,13 @@ We have used multiple datasets from different with diffrent complexities. The de
    cd Efficient-Split-Learning
    ```
 
-3. Install the required dependencies:
-                ```
-                pip install -r requirements.txt
-                ```
+2. Install the required dependencies:
+   
+   ```
+   pip install -r requirements.txt
+   ```
 
-4. update `WANDB_KEY` in config.py
+3. update `WANDB_KEY` in config.py
 
     
 ## Setup Environment
