@@ -13,6 +13,37 @@ year = {2023}
 }
 ```
 
+## Table of Contents
+- [Overview](#overview)
+- [Dataset Used](#dataset-used)
+- [Setup Environment](#setup-environment)
+- [Training](#training)
+
+## Overview
+<p style="text-align: justify;">
+
+
+
+## Dataset Used
+
+We have used five datasets from different domains. The details about them are as follows
+
+1. **CIFAR-10:** 
+2. **ISIC-2019:** 
+3. **KITS19:**
+4. **IXI-Tiny:** 
+
+| **Data Set**      | **No. of Classes** | **Metric Used** | **Task** | **Base Model** | **Pretrained on Dataset** |
+|:--------------------------:|:------------------:|:------------------:|:---------------------:|:-------------------:|:------------------------------:|
+| **CIFAR-10**        | 10            | Accuracy            | Image Classification                   | MobileNetV3                  | ImageNet                      | 
+| **ISIC-2019**          | 8            | Balanced Accuracy        | Medical Image Classification                   | ResNet-18                 | ImageNet                       | 
+| **KITS19**        | 3            | Dice Score     | 3D-Image Segmentation                  | nnUNet                  | MSD Pancreas                       |  
+| **IXI-Tiny** | 2         | Dice Score       | 3D-Image Segmentation                  | 3D UNet               | MSD Spleen                     | 
+
+
+
+## Setup Environment
+
 ### Usage:
 
 ```bash
@@ -25,12 +56,10 @@ git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recurs
 
 - activate venv: `source ./.venv/bin/activate`
 
-### RUN:
-KiTS-19 EXAMPLE:
 
-```
-python trainer.py -c 6 -bs 4 -tbs 2 -n 30 --client_lr 6e-4 --server_lr 6e-4 --dataset kits19 --seed 42 --model nnunet --split 3 -kv --kv_refresh_rate 5 --kv_factor 2 --wandb
-```
+## Run the trainer Files:
+
+We have dedicated a trainer file which call specific trainer file for each dataset. 
 
 CIFAR10 EXAMPLE:
 
@@ -38,6 +67,12 @@ CIFAR10 EXAMPLE:
 python trainer.py -c 10 -bs 64 -tbs 256 -n 80 --client_lr 1e-3 --server_lr 1e-3 --dataset CIFAR10 --seed 42 --model resnet18 --split 1 -kv --kv_refresh_rate 0 --kv_factor 1 --wandb
 
 python trainer.py -c 10 -bs 64 -tbs 256 -n 80 --client_lr 1e-3 --server_lr 1e-3 --dataset CIFAR10 --seed 42 --model resnet18 --split 1 -kv --kv_refresh_rate 0 --kv_factor 1 --wandb > text.txt
+```
+
+KiTS-19 EXAMPLE:
+
+```
+python trainer.py -c 6 -bs 4 -tbs 2 -n 30 --client_lr 6e-4 --server_lr 6e-4 --dataset kits19 --seed 42 --model nnunet --split 3 -kv --kv_refresh_rate 5 --kv_factor 2 --wandb
 ```
 
 
@@ -79,10 +114,3 @@ options:
 ```
 
 ---
-
-## Datasets Used:
-
-- KiTS19
-- IXI-Tiny
-- ISICI-2019
-- CIFAR10
