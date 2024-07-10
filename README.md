@@ -19,10 +19,13 @@ Distributed training of deep learning models on resource-constrained devices has
 Deep learning (DL) models require significant memory, computational resources, and energy for the training process. Traditionally, they are trained centrally on a server using data collected from end devices. With the advent of IoT, data privacy concerns arise, making federated learning (FL) a viable solution. However, deploying FL on resource-constrained IoT devices poses challenges due to their limited processing capabilities and communication overheads. ESL addresses these issues by combining split learning (SL) and FL to optimize communication and computation, ensuring efficient training on IoT devices.
 
 ## Key Contributions
-    Transfer Learning and Personalization: Adaptation of transfer learning in the SL framework for improved performance.
-    Key-Value Store: Introduction of a server-side key-value store to cache activation values, reducing the need for repetitive data transmission.
-    Customized Layers: Addition of custom layers to the client's backend to handle non-IID data distributions efficiently.
-    Extensive Evaluation: Demonstrated improvements over baseline FL techniques on real-world federated benchmarks for image classification and 3D segmentation.
+Transfer Learning and Personalization: Adaptation of transfer learning in the SL framework for improved performance.
+
+Key-Value Store: Introduction of a server-side key-value store to cache activation values, reducing the need for repetitive data transmission.
+
+Customized Layers: Addition of custom layers to the client's backend to handle non-IID data distributions efficiently.
+
+Extensive Evaluation: Demonstrated improvements over baseline FL techniques on real-world federated benchmarks for image classification and 3D segmentation.
 
 ## Experimental Results
     1. Computation Reduction: 1623x reduction for image classification and 23.9x for 3D segmentation on resource-constrained devices.
