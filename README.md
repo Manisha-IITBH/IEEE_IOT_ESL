@@ -29,7 +29,9 @@ Deep learning (DL) models require significant memory, computational resources, a
 
 ## Experimental Results
 1. Computation Reduction: 1623x reduction for image classification and 23.9x for 3D segmentation on resource-constrained devices.
+   
 2. Communication Traffic Reduction: 3.92x reduction for image classification and 1.3x for 3D segmentation during training.
+   
 3. Accuracy Improvement: Improved average accuracy by 35% for image classification and 31% for 3D segmentation compared to baseline FL techniques.
 
 ## Dataset Used
@@ -44,14 +46,14 @@ We have used multiple datasets from different with diffrent complexities. The de
 
 ## Installation
 1. Clone the repository and navigate to the project directory:
-                        ```bash
+                        ```
                         git clone https://github.com/Manisha-IITBH/Efficient-Split-Learning.git --recursive
                         ```
-2. Install the required dependencies:
-                ```bash
+3. Install the required dependencies:
+                ```
                 pip install -r requirements.txt
                 ```
-3. update `WANDB_KEY` in config.py
+4. update `WANDB_KEY` in config.py
 
     
 ## Setup Environment
