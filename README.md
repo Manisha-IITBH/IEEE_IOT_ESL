@@ -5,13 +5,13 @@ Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel app
 ## Table of Contents
 - [Abstract](#abstract)
 - [Introduction](#introduction)
-- [Key Contributions](#contribution)
-- [Experimental Results](#results)
+- [Key Contributions](#key-contributions)
+- [Experimental Results](#experimental-Results)
 - [Dataset Used](#dataset-used)
-- [installation](#install)
+- [installation](#installation)
 - [Setup Environment](#setup-environment)
 - [Usage](#usgae)
-- [Citing ESL](#cite)
+- [Citing ESL](#cite-esl)
 
 ## Abstract
 Distributed training of deep learning models on resource-constrained devices has gained significant interest. Federated Learning (FL) and Split Learning (SL) are two prominent techniques for collaborative training. ESL optimizes these techniques by reducing device computation during parallel model training and minimizing high communication costs due to frequent exchanges of models, data, and gradients. ESL introduces a key-value store for caching intermediate activations and customizing state-of-the-art neural networks for split learning. This approach allows clients to learn personalized models tailored to their specific data distributions.
@@ -131,7 +131,7 @@ year = {2023}
 }
 ```
 
-## Citing FLamby
+## Citing ESL
 ```bibtex
 @ARTICLE{10587192,
   author={Chawla, Manisha and Gupta, Gagan Raj and Gaddam, Shreyas and Wadhwa, Manas},
