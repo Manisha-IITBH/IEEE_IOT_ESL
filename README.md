@@ -11,6 +11,7 @@ Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel app
 - [installation](#installation)
 - [Setup Environment](#setup-environment)
 - [Usage](#usage)
+- [Acknowlegment](#acknowlegment)
 - [Citing ESL](#cite-esl)
 
 ## Abstract
@@ -118,7 +119,10 @@ options:
 
 ---
 
-### based on [PFSL](https://paperswithcode.com/paper/pfsl-personalized-fair-split-learning-with)
+## Acknowlegment
+## Acknowledgments
+
+This project makes use of the [PFSL](https://paperswithcode.com/paper/pfsl-personalized-fair-split-learning-with) framework. If you use this project in your research, please consider citing:
 
 ```bibtex
 @software{Manas_Wadhwa_and_Gagan_Gupta_and_Ashutosh_Sahu_and_Rahul_Saini_and_Vidhi_Mittal_PFSL_2023,
@@ -132,6 +136,7 @@ year = {2023}
 ```
 
 ## Citing ESL
+If you use ESL project in your research, please consider citing:
 ```bibtex
 @ARTICLE{10587192,
   author={Chawla, Manisha and Gupta, Gagan Raj and Gaddam, Shreyas and Wadhwa, Manas},
