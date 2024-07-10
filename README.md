@@ -1,33 +1,35 @@
 # Efficient-Split-Learning
 
-### based on [PFSL](https://paperswithcode.com/paper/pfsl-personalized-fair-split-learning-with)
-
-```bibtex
-@software{Manas_Wadhwa_and_Gagan_Gupta_and_Ashutosh_Sahu_and_Rahul_Saini_and_Vidhi_Mittal_PFSL_2023,
-author = {Manas Wadhwa and Gagan Gupta and Ashutosh Sahu and Rahul Saini and Vidhi Mittal},
-month = {2},
-title = {{PFSL}},
-url = {https://github.com/mnswdhw/PFSL},
-version = {1.0.0},
-year = {2023} 
-}
-```
+Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel approach to optimizing distributed training of deep learning models on resource-constrained devices.
 
 ## Table of Contents
-- [Overview](#overview)
+- [Abstract](#abstract)
+- [Introduction](#introduction)
+- [Key Contributions](#contribution)
+- [Experimental Results](#results)
 - [Dataset Used](#dataset-used)
 - [Setup Environment](#setup-environment)
 - [Training](#training)
 
-## Overview
-<p style="text-align: justify;">
+## Abstract
+Distributed training of deep learning models on resource-constrained devices has gained significant interest. Federated Learning (FL) and Split Learning (SL) are two prominent techniques for collaborative training. ESL optimizes these techniques by reducing device computation during parallel model training and minimizing high communication costs due to frequent exchanges of models, data, and gradients. ESL introduces a key-value store for caching intermediate activations and customizing state-of-the-art neural networks for split learning. This approach allows clients to learn personalized models tailored to their specific data distributions.
 
+## Introduction
+Deep learning (DL) models require significant memory, computational resources, and energy for the training process. Traditionally, they are trained centrally on a server using data collected from end devices. With the advent of IoT, data privacy concerns arise, making federated learning (FL) a viable solution. However, deploying FL on resource-constrained IoT devices poses challenges due to their limited processing capabilities and communication overheads. ESL addresses these issues by combining split learning (SL) and FL to optimize communication and computation, ensuring efficient training on IoT devices.
 
+## Key Contributions
+    1. Transfer Learning and Personalization: Adaptation of transfer learning in the SL framework for improved performance.
+    2. Key-Value Store: Introduction of a server-side key-value store to cache activation values, reducing the need for repetitive data transmission.
+    3. Customized Layers: Addition of custom layers to the client's backend to handle non-IID data distributions efficiently.
+    4. Extensive Evaluation: Demonstrated improvements over baseline FL techniques on real-world federated benchmarks for image classification and 3D segmentation.
+
+## Experimental Results
+    1. Computation Reduction: 1623x reduction for image classification and 23.9x for 3D segmentation on resource-constrained devices.
+    2. Communication Traffic Reduction: 3.92x reduction for image classification and 1.3x for 3D segmentation during training.
+    3. Accuracy Improvement: Improved average accuracy by 35% for image classification and 31% for 3D segmentation compared to baseline FL techniques.
 
 ## Dataset Used
-
 We have used multiple datasets from different with diffrent complexities. The details about them are as follows
-
 1. **CIFAR-10:** 
 2. **ISIC-2019:** 
 3. **KITS19:**
@@ -115,3 +117,16 @@ options:
 ```
 
 ---
+
+### based on [PFSL](https://paperswithcode.com/paper/pfsl-personalized-fair-split-learning-with)
+
+```bibtex
+@software{Manas_Wadhwa_and_Gagan_Gupta_and_Ashutosh_Sahu_and_Rahul_Saini_and_Vidhi_Mittal_PFSL_2023,
+author = {Manas Wadhwa and Gagan Gupta and Ashutosh Sahu and Rahul Saini and Vidhi Mittal},
+month = {2},
+title = {{PFSL}},
+url = {https://github.com/mnswdhw/PFSL},
+version = {1.0.0},
+year = {2023} 
+}
+```
