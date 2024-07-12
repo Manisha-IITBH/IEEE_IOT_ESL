@@ -1,7 +1,8 @@
 # Efficient Split Learning
 
 Welcome to the GitHub repository for Efficient Split Learning (ESL), a novel approach to optimizing distributed training of deep learning models on resource-constrained devices.
-Check out the abstract and get early access to our paper: [Link text](https://ieeexplore.ieee.org/document/10587192)
+
+Check out the abstract and get early access to our paper: [Link](https://ieeexplore.ieee.org/document/10587192)
 
 ## Table of Contents
 - [Abstract](#abstract)
