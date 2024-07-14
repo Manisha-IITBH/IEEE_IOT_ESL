@@ -10,7 +10,7 @@ Check out the abstract and get early access to our paper: [Link](https://ieeexpl
 - [Key Contributions](#key-contributions)
 - [Experimental Results](#experimental-Results)
 - [Dataset Used](#dataset-used)
-- [installation](#installation)
+- [Installation](#installation)
 - [Setup Environment](#setup-environment)
 - [Usage](#usage)
 - [Acknowlegment](#acknowlegment)
